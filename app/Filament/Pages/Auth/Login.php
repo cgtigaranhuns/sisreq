@@ -17,7 +17,7 @@ class Login extends BaseLogin
     public function getHeading(): string|Htmlable
     {
         return 'SISREQ';
-    
+       
     }
 
     public function getSubheading(): string|Htmlable
