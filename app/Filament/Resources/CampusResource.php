@@ -22,6 +22,7 @@ class CampusResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
     protected static ?string $navigationLabel = 'Campus';
     protected static ?string $slug = 'campus';
+    protected static ?string $pluralModelLabel = 'Campus';
 
     public static function form(Form $form): Form
     {
