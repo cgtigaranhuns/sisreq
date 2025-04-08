@@ -63,6 +63,15 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        ->modifyQueryUsing(function (Builder $query) {
+            $user = auth()->user();
+            // Se o usuário for do perfil "usuário", filtra os registros pelo user_id
+            if ($user->hasRole(['Admin','TI'])) {
+                $query;
+            }else {
+                $query->where('id', $user->id)->where('status', 1);
+            }
+        })
         ->striped()
             ->columns([
                 Tables\Columns\TextColumn::make('matricula')

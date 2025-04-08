@@ -88,7 +88,7 @@ class User extends Authenticatable implements LdapAuthenticatable
 
     public function canAccessPanel(Panel $panel): bool
     {
-      //  return $this->hasPermissionTo('Painel Administrativo'); // Corrigido para hasRole (singular)
+        return $this->hasPermissionTo('Painel Administrativo'); // Corrigido para hasRole (singular)
       
     }
 }
