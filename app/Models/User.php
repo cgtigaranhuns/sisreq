@@ -9,10 +9,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable implements LdapAuthenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, AuthenticatesWithLdap;
+    use HasApiTokens, HasFactory, Notifiable, AuthenticatesWithLdap, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +28,14 @@ class User extends Authenticatable implements LdapAuthenticatable
         'password',
         'status'
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logOnlyDirty();
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

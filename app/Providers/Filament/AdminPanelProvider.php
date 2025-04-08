@@ -18,6 +18,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\NavigationGroup;
+use Rmsramos\Activitylog\ActivitylogPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -57,6 +59,29 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                ->label('Cadastros')
+               // ->icon('heroicon-o-plus-circle')
+                ->collapsed(),
+                //->collapsible(),
+                //->sidebarCollapsibleOnDesktop(),
+             //   NavigationGroup::make()
+             //   ->label('Dividendos por Carteira'),
+               // ->icon('heroicon-o-shopping-cart'),
+                NavigationGroup::make()
+                ->label('Configurações')
+                //->icon('heroicon-o-shopping-cart'),
+            ])
+            /*->resources([
+                config('filament-logger.activity_resource')
+            ])*/
+           /* ->plugins([
+                ActivitylogPlugin::make(),
+            ])*/
+            ->resources([
+                config('filament-logger.activity_resource')
             ])
             ->authMiddleware([
                 Authenticate::class,
