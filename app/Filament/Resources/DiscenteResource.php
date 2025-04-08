@@ -20,7 +20,7 @@ class DiscenteResource extends Resource
     protected static ?string $model = Discente::class;
 
     protected static ?string $navigationGroup = 'Cadastros';
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 6;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
    // protected static ?string $navigationLabel = 'Proventos';
 
