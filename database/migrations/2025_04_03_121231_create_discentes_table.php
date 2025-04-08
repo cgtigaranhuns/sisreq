@@ -3,9 +3,11 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 return new class extends Migration
 {
+    use SoftDeletes;
     /**
      * Run the migrations.
      */
@@ -20,12 +22,15 @@ return new class extends Migration
             $table->date('data_nascimento')->nullable();
             $table->string('cpf')->nullable();
             $table->string('rg')->nullable();
-            $table->string('campus')->nullable();
-            $table->string('curso')->nullable();
+            $table->unsignedBigInteger('campus_id');
+            $table->unsignedBigInteger('curso_id');
             $table->string('situacao')->nullable();
             $table->integer('periodo')->nullable();
             $table->string('turno')->nullable();
+            $table->softDeletes();
             $table->timestamps();
+            $table->foreign('campus_id')->references('id')->on('campus');
+            $table->foreign('curso_id')->references('id')->on('cursos');
         });
     }
 
