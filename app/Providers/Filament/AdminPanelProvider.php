@@ -63,15 +63,15 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 NavigationGroup::make()
                 ->label('Cadastros')
-               // ->icon('heroicon-o-plus-circle')
-                ->collapsed(),
+          
+                ->collapsed(true),
                 //->collapsible(),
                 //->sidebarCollapsibleOnDesktop(),
-             //   NavigationGroup::make()
-             //   ->label('Dividendos por Carteira'),
-               // ->icon('heroicon-o-shopping-cart'),
                 NavigationGroup::make()
-                ->label('Configurações')
+                ->label('Segurança'),
+              //  ->icon('heroicon-o-shopping-cart'),
+                NavigationGroup::make()
+                ->label('Configurações'),
                 //->icon('heroicon-o-shopping-cart'),
             ])
             /*->resources([
