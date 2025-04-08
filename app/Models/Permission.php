@@ -4,22 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Permission as ModelsPermission;
+
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Campus extends Model
+class Permission extends ModelsPermission
 {
-    use HasFactory, SoftDeletes, LogsActivity;
-    protected $table = 'campus';
+    use HasFactory,  LogsActivity;
+
     protected $fillable = [
-        'nome',
-        'status',
+        'name',
+        'guard_name',
     ];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['*'])
-            ->logOnlyDirty();
+         ->logOnly(['*'])
+         ->logOnlyDirty();
+        // Chain fluent methods for configuration options
     }
 }

@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
@@ -19,6 +20,7 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'Segurança';
     protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?int $navigationSort = 3;
     protected static ?string $navigationLabel = 'Usuários';
     protected static ?string $slug = 'usuarios';
     protected static ?string $pluralModelLabel = 'Usuários';
@@ -28,22 +30,33 @@ class UserResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('matricula')
+                    ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('nome')
+                    ->required()
                     ->maxLength(255),
-                
                 Forms\Components\TextInput::make('email')
-                    -label('E-mail')
+                    ->label('E-mail')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
+              //  Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
+                    ->label(label: 'Senha')
                     ->password()
-                    ->required()
-                    ->maxLength(255),
+                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->required(fn (string $context): bool => $context === 'create'),
                 Forms\Components\Toggle::make('status')
-                    ->required(),
+                    ->required()
+                    ->default(true),
+                Forms\Components\Select::make('roles')
+                    ->label('Perfil')
+                  //  ->multiple()
+                    ->preload()
+                    ->relationship('roles', 'name', fn(builder $query) => auth()->user()->hasRole('Admin')? null :
+                    $query->where('name', '!=', 'Admin')),
+                
             ]);
     }
 
@@ -65,14 +78,17 @@ class UserResource extends Resource
                     ->sortable(),*/
                 Tables\Columns\IconColumn::make('status')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                    Tables\Columns\TextColumn::make('roles.name')
+                ->label('Perfil')
+                ->searchable(),
+               /* Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true),*/
             ])
             ->filters([
                 //

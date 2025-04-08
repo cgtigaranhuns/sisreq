@@ -60,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->sidebarCollapsibleOnDesktop()
             ->navigationGroups([
                 NavigationGroup::make()
                 ->label('Cadastros')
@@ -74,12 +75,7 @@ class AdminPanelProvider extends PanelProvider
                 ->label('Configurações'),
                 //->icon('heroicon-o-shopping-cart'),
             ])
-            /*->resources([
-                config('filament-logger.activity_resource')
-            ])*/
-           /* ->plugins([
-                ActivitylogPlugin::make(),
-            ])*/
+            
             ->resources([
                 config('filament-logger.activity_resource')
             ])

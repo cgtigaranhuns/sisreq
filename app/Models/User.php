@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+//use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,10 +13,11 @@ use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements LdapAuthenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, AuthenticatesWithLdap, LogsActivity;
+    use HasApiTokens, HasFactory, Notifiable, AuthenticatesWithLdap, HasRoles, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -81,5 +84,11 @@ class User extends Authenticatable implements LdapAuthenticatable
     public function setLdapGuid($guid): void
     {
         $this->guid = $guid;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+      //  return $this->hasPermissionTo('Painel Administrativo'); // Corrigido para hasRole (singular)
+      
     }
 }
