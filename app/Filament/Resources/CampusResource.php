@@ -19,7 +19,7 @@ class CampusResource extends Resource
 
     protected static ?string $navigationGroup = 'Cadastros';
     protected static ?int $navigationSort = 5;
-    protected static ?string $navigationIcon = 'heroicon-o-building-library';
+    protected static ?string $navigationIcon = 'heroicon-s-building-office-2';
     protected static ?string $navigationLabel = 'Campus';
     protected static ?string $slug = 'campus';
     protected static ?string $pluralModelLabel = 'Campus';

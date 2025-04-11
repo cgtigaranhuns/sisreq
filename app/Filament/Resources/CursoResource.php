@@ -19,7 +19,7 @@ class CursoResource extends Resource
 
     protected static ?string $navigationGroup = 'Cadastros';
     protected static ?int $navigationSort = 5;
-    protected static ?string $navigationIcon = 'heroicon-o-bookmark-square';
+    protected static ?string $navigationIcon = 'heroicon-s-building-library';
     protected static ?string $navigationLabel = 'Cursos';
     //protected static ?string $slug = 'usuarios';
     //otected static ?string $pluralModelLabel = 'Usuários';

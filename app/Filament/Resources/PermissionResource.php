@@ -17,7 +17,7 @@ class PermissionResource extends Resource
 {
     protected static ?string $model = Permission::class;
     protected static ?string $navigationGroup = 'Segurança';
-    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static ?string $navigationIcon = 'heroicon-s-shield-exclamation';
     protected static ?int $navigationSort = 1;
     protected static ?string $navigationLabel = 'Permissões';
     protected static ?string $slug = 'permissoes';

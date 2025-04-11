@@ -21,7 +21,7 @@ class DiscenteResource extends Resource
 
     protected static ?string $navigationGroup = 'Cadastros';
     protected static ?int $navigationSort = 6;
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-s-academic-cap';
    // protected static ?string $navigationLabel = 'Proventos';
 
     public static function form(Form $form): Form
