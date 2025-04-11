@@ -18,6 +18,7 @@
         "rmsramos/activitylog": "^1.0",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-permission": "^6.16",
+        "leandrocfe/filament-ptbr-form-fields": "3.0",
         "z3d0x/filament-logger": "^0.8.0"
     },
     "require-dev": {
@@ -27,6 +28,7 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.1",
+        "lucascudo/laravel-pt-br-localization": "^3.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
