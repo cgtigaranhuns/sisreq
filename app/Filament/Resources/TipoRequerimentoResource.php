@@ -39,7 +39,7 @@ class TipoRequerimentoResource extends Resource
                     //->required()
                     ->maxLength(255),
                 Forms\Components\Toggle::make('infor_complementares')
-                ->label('Informações complementares')
+                ->label('Informações complementares?')
                     ->required(),
                 Forms\Components\Toggle::make('status')
                     ->default('true') 	

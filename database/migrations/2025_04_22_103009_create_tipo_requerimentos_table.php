@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tipo_requerimentos', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
-            $table->string('anexo');
+            $table->string('anexo')->nullable();
             $table->boolean('infor_complementares')->default(false);
             $table->softDeletes();
             $table->timestamps();

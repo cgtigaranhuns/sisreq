@@ -48,19 +48,5 @@ class Tipo_RequerimentoPolicy
         return $user->hasPermissionTo('Deletar Tipo de Requerimento');
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Tipo_requerimento $tipoRequerimento): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Tipo_requerimento $tipoRequerimento): bool
-    {
-        //
-    }
+    
 }
