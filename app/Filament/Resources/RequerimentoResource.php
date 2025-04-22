@@ -78,6 +78,12 @@ class RequerimentoResource extends Resource
                 /*Tables\Columns\TextColumn::make('observacoes')
                     ->searchable(),*/
                 Tables\Columns\TextColumn::make('status')
+                ->badge()
+                ->color(fn (string $state): string => match ($state) {
+                    'pendente' => 'gray',
+                    'em_analise' => 'warning',
+                    'finalizado' => 'success',
+                })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
