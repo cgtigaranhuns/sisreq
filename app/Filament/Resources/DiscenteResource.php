@@ -93,9 +93,9 @@ class DiscenteResource extends Resource
                 Tables\Columns\TextColumn::make('telefone')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('data_nascimento')
-                    ->date($format = 'd/m/y')
+                    ->date($format = 'd/m/Y')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('cpf')
+             /*   Tables\Columns\TextColumn::make('cpf')
                     ->label('CPF')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('rg')
@@ -104,7 +104,7 @@ class DiscenteResource extends Resource
                 Tables\Columns\TextColumn::make('campus.nome')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('curso.nome')
-                    ->searchable(),
+                    ->searchable(),*/
                 Tables\Columns\TextColumn::make('situacao')
                     ->label ('Situação')
                     ->color(function ($record) {
@@ -115,7 +115,7 @@ class DiscenteResource extends Resource
                         }
                     })
                     ->searchable(),
-                Tables\Columns\TextColumn::make('periodo')
+            /*    Tables\Columns\TextColumn::make('periodo')
                     ->label('Período')
                     ->searchable()
                     ->numeric()
