@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('descricao');
             $table->string('status');
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('id_requerimento')->references('id')->on('requerimentos');
         });
     }

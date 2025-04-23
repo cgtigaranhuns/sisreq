@@ -38,4 +38,30 @@ class Requerimento extends Model
     {
         return $this->belongsTo(Tipo_requerimento::class);
     }
+
+     // Status possíveis
+     const STATUS_PENDENTE = 'pendente';
+     const STATUS_EM_ANALISE = 'em_analise';
+     const STATUS_FINALIZADO = 'finalizado';
+ 
+     public function informacaoComplementar()
+     {
+         return $this->hasOne(infor_complement::class, 'id_requerimento', 'id');
+     }
+         // Adicione dentro da classe
+     public function acompanhamentos(): HasMany
+     {
+         return $this->hasMany(Acompanhamento::class);
+     }
+ 
+     // Nova relação com anexos
+    public function anexos()
+    {
+        return $this->hasMany(Anexo::class);
+    }
+     // Verifica se o requerimento pode ser editado
+     public function podeSerEditado(): bool
+     {
+         return $this->status !== self::STATUS_FINALIZADO;
+     }
 }

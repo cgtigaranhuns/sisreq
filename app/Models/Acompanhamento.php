@@ -18,7 +18,7 @@ class Acompanhamento extends Model
 
     public function requerimento()
     {
-        return $this->belongsTo(requerimentos::class, 'requerimento_id', 'id');
+        return $this->belongsTo(Requerimento::class, 'requerimento_id', 'id');
     }
     public function user()
     {

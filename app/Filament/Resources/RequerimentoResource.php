@@ -41,19 +41,80 @@ class RequerimentoResource extends Resource
                     ->searchable()
                     ->preload(),
                 Forms\Components\Select::make('tipo_requerimento_id')
+                    ->label('Tipo do Requerimento')
                     ->relationship('tipo_requerimento', 'descricao')
                     ->required()
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->live() // Adiciona reactividade
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        if ($state) {
+                            $tipoRequerimento = Tipo_requerimento::find($state);
+                            $set('anexo', $tipoRequerimento->anexo ?? '');
+                            // Define o estado do toggle com base no valor de infor_complementares
+                            $set('tem_informacoes_complementares', $tipoRequerimento->infor_complementares ?? false);
+                        }
+                    }),
+                    Textarea::make('observacoes')
+                    ->label('Observações' )
+                    ->rows(7)
+                   
+                    ->maxLength(255),
+               
                 Textarea::make('anexo')
                     ->label('Anexo(s) - Documentos exigidos' )
                     ->rows(7)
+                    ->disabled()
                     //->required()
+                    ->dehydrated()
                     ->maxLength(255),
+
+                
                /* Forms\Components\TextInput::make('status')
                     ->required()
                     ->maxLength(255)
                     ->default('pendente'),*/
+
+                    // informações complementares
+
+                    // Botão para ativar informações complementares
+                Forms\Components\Toggle::make('tem_informacoes_complementares')
+                ->label('Adicionar informações complementares?')
+                ->live()
+                ->visible(false)
+                ->afterStateUpdated(function ($state, Forms\Set $set) {
+                    if (!$state) {
+                        $set('descricao_complementar', null);
+                       // $set('status_complementar', null);
+                    }
+                }),
+            
+                // Campos condicionais para informações complementares
+                Forms\Components\Fieldset::make('Informações Complementares')
+                    ->schema([
+                        Forms\Components\Textarea::make('descricao_complementar')
+                            ->label('Descrição')
+                            ->rows(7)
+                            ->hidden(fn (Forms\Get $get): bool => !$get('tem_informacoes_complementares')),
+                    
+                    ])
+                    ->hidden(fn (Forms\Get $get): bool => !$get('tem_informacoes_complementares')),
+
+                Forms\Components\FileUpload::make('anexos')
+                    ->label('Anexos')
+                    ->multiple()
+                    ->directory('requerimentos/temp')
+                    ->preserveFilenames()
+                    ->downloadable()
+                    ->openable()
+                    ->acceptedFileTypes([
+                        'application/pdf',
+                        'image/*',
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                    ])
+                    ->maxSize(5120) // 5MB
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -62,9 +123,10 @@ class RequerimentoResource extends Resource
         return $table
             ->striped()
             ->columns([
-              /*  Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('id')
+                    ->label('#')
                     ->numeric()
-                    ->sortable(),*/
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('discente.nome')
                     ->numeric()
                     ->sortable(),
@@ -77,26 +139,33 @@ class RequerimentoResource extends Resource
                     ->sortable(),
                 /*Tables\Columns\TextColumn::make('observacoes')
                     ->searchable(),*/
-                Tables\Columns\TextColumn::make('status')
-                ->badge()
-                ->color(fn (string $state): string => match ($state) {
-                    'pendente' => 'gray',
-                    'em_analise' => 'warning',
-                    'finalizado' => 'success',
-                })
-                    ->searchable(),
+               
+                Tables\Columns\TextColumn::make('anexos_count')
+                    ->label('Anexos')
+                    ->aligncenter()
+                    ->counts('anexos'),
+                   
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+               /* Tables\Columns\TextColumn::make('created_at')
+                    ->label('Criado em')
+                    ->dateTime(format: 'd/m/Y')
+                    ->sortable(),*/
+                  //  ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pendente' => 'danger',
+                        'em_analise' => 'warning',
+                        'finalizado' => 'success',
+                    })
+                    ->searchable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -117,7 +186,8 @@ class RequerimentoResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\AnexosRelationManager::class,
+            RelationManagers\InformacaoComplementarRelationManager::class,
         ];
     }
 
@@ -137,5 +207,46 @@ class RequerimentoResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    protected function handleRecordCreation(array $data): Model
+    {
+        $requerimento = parent::handleRecordCreation($data);
+    
+        if (isset($data['anexos']) && is_array($data['anexos'])) {
+            foreach ($data['anexos'] as $anexoPath) {
+                try {
+                    // Define o diretório específico para o requerimento
+                    $diretorioRequerimento = 'requerimentos/anexos/' . $requerimento->id;
+                    
+                    // Obtém o nome original do arquivo
+                    $nomeOriginal = basename($anexoPath);
+                    
+                    // Gera um nome único para o arquivo
+                    $nomeUnico = uniqid() . '_' . $nomeOriginal;
+                    
+                    // Cria o caminho final
+                    $caminhoFinal = $diretorioRequerimento . '/' . $nomeUnico;
+                    
+                    // Move o arquivo para o diretório do requerimento
+                    \Illuminate\Support\Facades\Storage::disk('public')
+                        ->move($anexoPath, $caminhoFinal);
+                    
+                    // Salva no banco de dados
+                    Anexo::create([
+                        'requerimento_id' => $requerimento->id,
+                        'caminho' => $caminhoFinal,
+                        'nome_original' => $nomeOriginal,
+                        'mime_type' => \Illuminate\Support\Facades\Storage::disk('public')->mimeType($caminhoFinal),
+                        'tamanho' => \Illuminate\Support\Facades\Storage::disk('public')->size($caminhoFinal),
+                    ]);
+                } catch (\Exception $e) {
+                    logger()->error('Erro ao salvar anexo: ' . $e->getMessage());
+                    continue;
+                }
+            }
+        }
+    
+        return $requerimento;
     }
 }
