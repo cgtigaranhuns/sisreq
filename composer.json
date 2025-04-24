@@ -15,7 +15,6 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "rmsramos/activitylog": "^1.0",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-permission": "^6.16",
         "leandrocfe/filament-ptbr-form-fields": "3.0",
