@@ -35,7 +35,7 @@ class RequerimentoResource extends Resource
                 Forms\Components\Hidden::make('user_id') // Campo oculto para o user_id
                     ->default(auth()->id()) // Preenche automaticamente com o ID do usuário logado
                     ->required(),
-                    Forms\Components\Select::make('discente_id')
+                Forms\Components\Select::make('discente_id')
                     ->relationship(
                         name: 'discente',
                         titleAttribute: 'nome',
