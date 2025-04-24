@@ -39,8 +39,26 @@ class TipoRequerimentoResource extends Resource
                     //->required()
                     ->maxLength(255),
                 Forms\Components\Toggle::make('infor_complementares')
-                ->label('Informações complementares?')
-                    ->required(),
+                ->label('Adicionar informações complementares?')
+                ->live()
+                //->visible(false)
+                ->afterStateUpdated(function ($state, Forms\Set $set) {
+                    if (!$state) {
+                        $set('template', null);
+                       // $set('status_complementar', null);
+                    }
+                }),
+            
+                // Campos condicionais para informações complementares
+                Forms\Components\Fieldset::make('Modelo de Informações Complementares')
+                    ->schema([
+                        Forms\Components\Textarea::make('template')
+                            ->label('Descrição')
+                            ->rows(7)
+                            ->hidden(fn (Forms\Get $get): bool => !$get('infor_complementares')),
+                    
+                    ])
+                    ->hidden(fn (Forms\Get $get): bool => !$get('infor_complementares')),
                 Forms\Components\Toggle::make('status')
                     ->default('true') 	
                     ->required(),

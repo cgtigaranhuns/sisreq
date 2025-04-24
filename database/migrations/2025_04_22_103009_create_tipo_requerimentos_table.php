@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('descricao');
             $table->string('anexo')->nullable();
             $table->boolean('infor_complementares')->default(false);
+            $table->string('template')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->boolean('status')->default(true);

@@ -17,6 +17,7 @@ class Tipo_requerimento extends Model
         'descricao',
         'anexo',
         'infor_complementares',
+        'template',
         'status',
     ];
 

@@ -51,6 +51,7 @@ class RequerimentoResource extends Resource
                         if ($state) {
                             $tipoRequerimento = Tipo_requerimento::find($state);
                             $set('anexo', $tipoRequerimento->anexo ?? '');
+                            $set('descricao_complementar', $tipoRequerimento->template ?? '');
                             // Define o estado do toggle com base no valor de infor_complementares
                             $set('tem_informacoes_complementares', $tipoRequerimento->infor_complementares ?? false);
                         }
@@ -84,7 +85,8 @@ class RequerimentoResource extends Resource
                 ->visible(false)
                 ->afterStateUpdated(function ($state, Forms\Set $set) {
                     if (!$state) {
-                        $set('descricao_complementar', null);
+                       // $tipoRequerimento = Tipo_requerimento::find($state);
+                      //  $set('descricao_complementar', $tipoRequerimento->template ?? '');
                        // $set('status_complementar', null);
                     }
                 }),
@@ -93,7 +95,7 @@ class RequerimentoResource extends Resource
                 Forms\Components\Fieldset::make('Informações Complementares')
                     ->schema([
                         Forms\Components\Textarea::make('descricao_complementar')
-                            ->label('Descrição')
+                            ->label('')
                             ->rows(7)
                             ->hidden(fn (Forms\Get $get): bool => !$get('tem_informacoes_complementares')),
                     
@@ -114,7 +116,16 @@ class RequerimentoResource extends Resource
                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     ])
                     ->maxSize(5120) // 5MB
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->hidden(function (Forms\Get $get) {
+                        $tipoId = $get('tipo_requerimento_id');
+                        if (!$tipoId) {
+                            return true;
+                        }
+                        
+                        $tipoRequerimento = Tipo_requerimento::find($tipoId);
+                        return $tipoRequerimento->anexo === null;
+                    }),
             ]);
     }
 
@@ -208,7 +219,7 @@ class RequerimentoResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
-
+/*
     protected function handleRecordCreation(array $data): Model
     {
         $requerimento = parent::handleRecordCreation($data);
@@ -248,5 +259,5 @@ class RequerimentoResource extends Resource
         }
     
         return $requerimento;
-    }
+    }*/
 }
