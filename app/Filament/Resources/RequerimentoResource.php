@@ -35,11 +35,23 @@ class RequerimentoResource extends Resource
                 Forms\Components\Hidden::make('user_id') // Campo oculto para o user_id
                     ->default(auth()->id()) // Preenche automaticamente com o ID do usuário logado
                     ->required(),
-                Forms\Components\Select::make('discente_id')
-                    ->relationship('discente', 'nome')
+                    Forms\Components\Select::make('discente_id')
+                    ->relationship(
+                        name: 'discente',
+                        titleAttribute: 'nome',
+                        modifyQueryUsing: fn (Builder $query) => auth()->user()->hasRole('Discente') 
+                            ? $query->where('matricula', auth()->user()->matricula) // Filtra por matrícula do usuário
+                            : $query
+                    )
                     ->required()
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->disabled(fn () => auth()->user()->hasRole('Discente')) // Desabilita se for Discente
+                    ->default(
+                        fn () => auth()->user()->hasRole('Discente')
+                            ? Discente::where('matricula', auth()->user()->matricula)->first()?->id 
+                            : null
+                    ) ,
                 Forms\Components\Select::make('tipo_requerimento_id')
                     ->label('Tipo do Requerimento')
                     ->relationship('tipo_requerimento', 'descricao')
@@ -132,6 +144,15 @@ class RequerimentoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        ->modifyQueryUsing(function (Builder $query) {
+            $user = auth()->user();
+            // Se o usuário for do perfil "usuário", filtra os registros pelo user_id
+            if ($user->hasRole('Discente')) {
+                $query->where('user_id', $user->id);
+            }else {
+               $query;
+            }
+        })
             ->striped()
             ->columns([
                 Tables\Columns\TextColumn::make('id')
