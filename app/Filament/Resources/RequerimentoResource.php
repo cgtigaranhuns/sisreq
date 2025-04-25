@@ -36,22 +36,24 @@ class RequerimentoResource extends Resource
                     ->default(auth()->id()) // Preenche automaticamente com o ID do usuário logado
                     ->required(),
                 Forms\Components\Select::make('discente_id')
-                    ->relationship(
-                        name: 'discente',
-                        titleAttribute: 'nome',
-                        modifyQueryUsing: fn (Builder $query) => auth()->user()->hasRole('Discente') 
-                            ? $query->where('matricula', auth()->user()->matricula) // Filtra por matrícula do usuário
-                            : $query
-                    )
+                    
+                        //->relationship('discente', 'nome')
+                        ->relationship(
+                            name: 'discente',
+                            titleAttribute: 'nome',
+                            modifyQueryUsing: fn (Builder $query) => auth()->user()->hasRole('Discente') 
+                                ? $query->where('matricula', auth()->user()->matricula) // Filtra por matrícula do usuário
+                                : $query
+                        )
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->disabled(fn () => auth()->user()->hasRole('Discente')) // Desabilita se for Discente
+                    //->readonly(fn () => auth()->user()->hasRole('Discente')) // Desabilita se for Discente
                     ->default(
                         fn () => auth()->user()->hasRole('Discente')
                             ? Discente::where('matricula', auth()->user()->matricula)->first()?->id 
                             : null
-                    ) ,
+                     ) ,
                 Forms\Components\Select::make('tipo_requerimento_id')
                     ->label('Tipo do Requerimento')
                     ->relationship('tipo_requerimento', 'descricao')
@@ -148,9 +150,9 @@ class RequerimentoResource extends Resource
             $user = auth()->user();
             // Se o usuário for do perfil "usuário", filtra os registros pelo user_id
             if ($user->hasRole('Discente')) {
-                $query->where('user_id', $user->id);
+                $query->where('user_id', $user->id)->orderBY('id', 'desc'); 
             }else {
-               $query;
+               $query->orderBY('id', 'desc');
             }
         })
             ->striped()
@@ -160,23 +162,21 @@ class RequerimentoResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('discente.nome')
-                    ->numeric()
+                    //->numeric()
+                    ->limit(35)
                     ->sortable(),
                     Tables\Columns\TextColumn::make('discente.matricula')
                     ->label('Matricula')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tipo_requerimento.descricao')
-                    ->numeric()
+                    ->Label('Tipo do Requerimento')
+                    ->limit(35)
                     ->sortable(),
-                /*Tables\Columns\TextColumn::make('observacoes')
-                    ->searchable(),*/
-               
                 Tables\Columns\TextColumn::make('anexos_count')
                     ->label('Anexos')
                     ->aligncenter()
                     ->counts('anexos'),
-                   
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -205,6 +205,13 @@ class RequerimentoResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ->modalHeading('Tem certeza?')
+                ->modalDescription('Essa ação não pode ser desfeita.')
+                ->modalButton('Excluir')
+                ->modalWidth('md') // ✅ Correção: Usando o enum corretamente
+                //->label('')
+                ->tooltip('Excluir'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

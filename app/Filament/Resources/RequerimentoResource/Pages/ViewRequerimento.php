@@ -34,24 +34,11 @@ class ViewRequerimento extends ViewRecord
                     Forms\Components\Textarea::make('anexo')
                         ->label('Documentos Exigidos')
                         ->disabled()
-                        ->hidden()
-                        ,
+                        ->hidden(),
                     Forms\Components\Textarea::make('observacoes')
                         ->label('Observações')
                         ->rows(7)
-                        ->disabled()
-                       ,
-                ])
-         /*   
-            Forms\Components\Section::make('Informações Complementares')
-                ->schema([
-                    Forms\Components\Textarea::make('descricao_complementar')
-                        ->label('Descrição')
-                        ->disabled()
-                        ->columnSpanFull(),
-                ])->hidden(fn ($record) => !$record->tem_informacoes_complementares),*/
-            
-            // Remova completamente o FileUpload para a visualização
-        ;
+                        ->disabled(),
+                ]);
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 class EditRequerimento extends EditRecord
 {
     protected static string $resource = RequerimentoResource::class;
+    protected static ?string $title = 'Editar Requerimento';
 
     protected function afterSave(): void
     {

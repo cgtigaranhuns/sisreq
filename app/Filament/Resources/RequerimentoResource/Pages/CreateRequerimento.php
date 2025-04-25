@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class CreateRequerimento extends CreateRecord
 {
     protected static string $resource = RequerimentoResource::class;
+    protected static ?string $title = 'Novo Requerimento';
 
     protected function afterCreate(): void
     {

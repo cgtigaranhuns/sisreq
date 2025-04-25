@@ -31,10 +31,10 @@ class InformacaoComplementarRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->paginated(false)
             ->columns([
                 Tables\Columns\TextColumn::make('descricao')
-                    //->label('Descrição')
-                    
+                    ->label('')
                     ->limit(1000)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
