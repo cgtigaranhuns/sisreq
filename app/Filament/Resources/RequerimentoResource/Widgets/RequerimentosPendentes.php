@@ -1,0 +1,96 @@
+<?php
+
+namespace App\Filament\Resources\RequerimentoResource\Widgets;
+
+use App\Models\Requerimento;
+use Filament\Tables;
+use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\DeleteAction;
+use App\Filament\Resources\RequerimentoResource;
+
+class RequerimentosPendentes extends BaseWidget
+{
+    protected int|string|array $columnSpan = 'full';
+    protected static ?string $heading = 'Pendentes';
+    /*protected static ?string $headingColor = 'primary'; 
+    protected static ?string $headingAlignment = 'center'; // Centraliza o título */
+
+    protected function getTableQuery(): Builder
+    {
+        $query = Requerimento::query()
+            ->where('status', 'pendente')
+            ->orderBy('id', 'desc');
+
+        if (auth()->user()->hasRole('Discente')) {
+            $query->where('user_id', auth()->id());
+        }
+
+        return $query;
+    }
+
+    protected function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('id')
+                ->label('#')
+                ->numeric()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('discente.nome')
+                ->limit(35)
+                ->sortable(),
+            Tables\Columns\TextColumn::make('discente.matricula')
+                ->label('Matrícula')
+                ->numeric()
+                ->sortable(),
+            Tables\Columns\TextColumn::make('tipo_requerimento.descricao')
+                ->label('Tipo do Requerimento')
+                ->limit(35)
+                ->sortable(),
+            Tables\Columns\TextColumn::make('anexos_count')
+                ->label('Anexos')
+                ->alignCenter()
+                ->counts('anexos'),
+            Tables\Columns\TextColumn::make('status')
+                ->badge()
+                ->formatStateUsing(fn (string $state): string => match ($state) {
+                    'pendente' => 'Pendente',
+                     default => $state,
+                })
+                ->color(fn (string $state): string => match ($state) {
+                    'pendente' => 'danger',
+                    'em_analise' => 'warning',
+                    'finalizado' => 'success',
+                })
+                ->searchable(),
+        ];
+    }
+
+   
+    
+    protected function getTableActions(): array
+    {
+        return [
+            ViewAction::make()
+                ->url(fn (Requerimento $record): string => RequerimentoResource::getUrl('view', ['record' => $record])),
+            
+            EditAction::make()
+                ->url(fn (Requerimento $record): string => RequerimentoResource::getUrl('edit', ['record' => $record])),
+            
+            DeleteAction::make()
+                ->modalHeading('Tem certeza?')
+                ->modalDescription('Essa ação não pode ser desfeita.')
+                ->modalButton('Excluir')
+                ->modalWidth('md')
+                ->requiresConfirmation()
+                ->action(fn (Requerimento $record) => $record->delete()),
+        ];
+    }
+
+    protected function getTableRecordUrlUsing(): ?\Closure
+    {
+        return fn (Requerimento $record): string => RequerimentoResource::getUrl('view', ['record' => $record]);
+    }
+}

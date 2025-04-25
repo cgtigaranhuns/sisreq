@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RequerimentoResource\Pages;
 use App\Filament\Resources\RequerimentoResource\RelationManagers;
+use App\Filament\Resources\RequerimentoResource\Pages\ListRequerimentos;
 use App\Models\Requerimento;
 use App\Models\Discente;
 use App\Models\Tipo_requerimento;
@@ -146,7 +147,8 @@ class RequerimentoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->modifyQueryUsing(function (Builder $query) {
+        ->paginated(false)
+      /*  ->modifyQueryUsing(function (Builder $query) {
             $user = auth()->user();
             // Se o usuário for do perfil "usuário", filtra os registros pelo user_id
             if ($user->hasRole('Discente')) {
@@ -155,9 +157,9 @@ class RequerimentoResource extends Resource
                $query->orderBY('id', 'desc');
             }
         })
-            ->striped()
+            ->striped()*/
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+               /*Tables\Columns\TextColumn::make('id')
                     ->label('#')
                     ->numeric()
                     ->sortable(),
@@ -177,7 +179,7 @@ class RequerimentoResource extends Resource
                     ->label('Anexos')
                     ->aligncenter()
                     ->counts('anexos'),
-                Tables\Columns\TextColumn::make('deleted_at')
+                /*Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -186,24 +188,24 @@ class RequerimentoResource extends Resource
                     ->dateTime(format: 'd/m/Y')
                     ->sortable(),*/
                   //  ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                /*Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('status')
+                    ->toggleable(isToggledHiddenByDefault: true),*/
+               /* Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'pendente' => 'danger',
                         'em_analise' => 'warning',
                         'finalizado' => 'success',
                     })
-                    ->searchable(),
+                    ->searchable(),*/
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+              ///  Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+             /*   Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
                 ->modalHeading('Tem certeza?')
@@ -211,14 +213,14 @@ class RequerimentoResource extends Resource
                 ->modalButton('Excluir')
                 ->modalWidth('md') // ✅ Correção: Usando o enum corretamente
                 //->label('')
-                ->tooltip('Excluir'),
+                ->tooltip('Excluir'),*/
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+             /*   Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
-                ]),
+                ]),*/
             ]);
     }
 
@@ -247,45 +249,14 @@ class RequerimentoResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
-/*
-    protected function handleRecordCreation(array $data): Model
-    {
-        $requerimento = parent::handleRecordCreation($data);
-    
-        if (isset($data['anexos']) && is_array($data['anexos'])) {
-            foreach ($data['anexos'] as $anexoPath) {
-                try {
-                    // Define o diretório específico para o requerimento
-                    $diretorioRequerimento = 'requerimentos/anexos/' . $requerimento->id;
-                    
-                    // Obtém o nome original do arquivo
-                    $nomeOriginal = basename($anexoPath);
-                    
-                    // Gera um nome único para o arquivo
-                    $nomeUnico = uniqid() . '_' . $nomeOriginal;
-                    
-                    // Cria o caminho final
-                    $caminhoFinal = $diretorioRequerimento . '/' . $nomeUnico;
-                    
-                    // Move o arquivo para o diretório do requerimento
-                    \Illuminate\Support\Facades\Storage::disk('public')
-                        ->move($anexoPath, $caminhoFinal);
-                    
-                    // Salva no banco de dados
-                    Anexo::create([
-                        'requerimento_id' => $requerimento->id,
-                        'caminho' => $caminhoFinal,
-                        'nome_original' => $nomeOriginal,
-                        'mime_type' => \Illuminate\Support\Facades\Storage::disk('public')->mimeType($caminhoFinal),
-                        'tamanho' => \Illuminate\Support\Facades\Storage::disk('public')->size($caminhoFinal),
-                    ]);
-                } catch (\Exception $e) {
-                    logger()->error('Erro ao salvar anexo: ' . $e->getMessage());
-                    continue;
-                }
-            }
-        }
-    
-        return $requerimento;
-    }*/
+
+    public static function getWidgets(): array
+{
+    return [
+        \App\Filament\Resources\RequerimentoResource\Widgets\RequerimentosPendentes::class,
+        \App\Filament\Resources\RequerimentoResource\Widgets\RequerimentosEmAnalise::class,
+        \App\Filament\Resources\RequerimentoResource\Widgets\RequerimentosFinalizados::class,
+    ];
+}
+
 }
