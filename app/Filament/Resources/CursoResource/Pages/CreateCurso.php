@@ -10,4 +10,8 @@ class CreateCurso extends CreateRecord
 {
     protected static string $resource = CursoResource::class;
     protected static ?string $title = 'Novo Curso';
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

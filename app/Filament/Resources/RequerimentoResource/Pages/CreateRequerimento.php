@@ -14,6 +14,10 @@ class CreateRequerimento extends CreateRecord
 {
     protected static string $resource = RequerimentoResource::class;
     protected static ?string $title = 'Novo Requerimento';
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 
     protected function afterCreate(): void
     {

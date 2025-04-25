@@ -10,4 +10,8 @@ class CreateRole extends CreateRecord
 {
     protected static string $resource = RoleResource::class;
     protected static ?string $title = 'Novo Perfil';
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

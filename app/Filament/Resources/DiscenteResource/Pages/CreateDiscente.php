@@ -10,4 +10,8 @@ class CreateDiscente extends CreateRecord
 {
     protected static string $resource = DiscenteResource::class;
     protected static ?string $title = 'Novo Discente';
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

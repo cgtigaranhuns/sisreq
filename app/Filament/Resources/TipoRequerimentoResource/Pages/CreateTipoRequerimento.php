@@ -10,4 +10,8 @@ class CreateTipoRequerimento extends CreateRecord
 {
     protected static string $resource = TipoRequerimentoResource::class;
     protected static ?string $title = 'Novo Tipo de Requerimento';
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
