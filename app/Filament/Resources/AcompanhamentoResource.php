@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AcompanhamentoResource\Pages;
 use App\Filament\Resources\AcompanhamentoResource\RelationManagers;
 use App\Models\Acompanhamento;
+use App\Models\Requerimento;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,64 +13,136 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Forms\Components\Select;
-use Forms\Components\TextInput;
 
 class AcompanhamentoResource extends Resource
 {
     protected static ?string $model = Acompanhamento::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Cadastros';
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationIcon = 'heroicon-s-ticket';
+    protected static ?string $navigationLabel = 'Acompanhamentos';
+    //protected static ?string $slug = 'requerimentos';
+    protected static ?string $pluralModelLabel = 'Acompanhamentos';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Hidden::make('user_id')
-                ->default(auth()->id()),
+                    ->default(auth()->id()),
+                    
                 Forms\Components\Select::make('requerimento_id')
-                ->relationship('requerimento', 'id')
-                ->required()
-                ->live() // Isso faz o campo "ouvir" mudanças
-                ->afterStateUpdated(function ($state, Forms\Set $set) {
-                    // Carrega os dados do requerimento quando um ID é selecionado
-                    $requerimento = \App\Models\Requerimento::find($state);
+                    ->relationship('requerimento', 'id')
+                    ->required()
+                    ->live()
+                    ->getOptionLabelFromRecordUsing(function ($record) {
+                        return "{$record->id} - {$record->discente->nome} - {$record->tipo_requerimento->descricao}";
+                    })
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        if (!$state) {
+                            return;
+                        }
+                        
+                        $requerimento = Requerimento::with([
+                            'discente',
+                            'tipo_requerimento',
+                            'anexos',
+                          //  'observacoes',
+                           // 'informacaoComplementar'
+                        ])->find($state);
+                        
+                        if ($requerimento) {
+                            $set('discente', $requerimento->discente->nome);
+                            $set('tipo_requerimento', $requerimento->tipo_requerimento->descricao);
+                            $set('observacoes', $requerimento->observacoes);
+                            
+                         //   $set('_anexos', $requerimento->anexos->nome_original);
+                            //dd('_anexos');
+
+                           // dd($requerimento->anexos->nome_original);
+
+                           $set('_anexos', $requerimento->anexos->map(function ($anexo) {
+                            return [
+                                'nome_original' => $anexo->nome_original,
+                                'caminho' => $anexo->caminho,
+                                'tamanho' => filesize(storage_path('app/public/' . $anexo->caminho))
+                            ];
+                        })->toArray());
+
+                        
+                            // Armazena a descrição diretamente no campo que será exibido
+                            $set('informacao_complementar_descricao', 
+                            $requerimento->informacaoComplementar->descricao ?? '');
+                        }
+                    }),
                     
-                    if ($requerimento) {
-                        $set('discente', $requerimento->discente->nome);
-                        $set('tipo_requerimento', $requerimento->tipo_requerimento_id); // Ajuste conforme seu campo real
-                    }
-                }),
-                Forms\Components\Select::make('discente')
-                ->label('Discente')
-                ->options(function (Forms\Get $get) {
-                    $requerimentoId = $get('requerimento_id');
-                    if (!$requerimentoId) {
-                        return [];
-                    }
+                Forms\Components\TextInput::make('discente')
+                    ->label('Discente')
+                    ->disabled()
+                    ->dehydrated(),
                     
-                    $requerimento = \App\Models\Requerimento::find($requerimentoId);
-                    return [$requerimento->discente_id => $requerimento->discente->nome]; // Ajuste conforme sua relação
-                })
-                ->required()
-                ->disabled(),
+                Forms\Components\TextInput::make('tipo_requerimento')
+                    ->label('Tipo de Requerimento')
+                    ->disabled()
+                    ->dehydrated(),
+                Forms\Components\Textarea::make('observacoes')
+                    ->label('Observações do Requerimento' )
+                    ->rows(7)
+                    ->disabled()
+                    //->required()
+                    ->dehydrated()
+                    ->maxLength(255),
+                    
+                    // Seção de Anexos
+                // Seção para exibir anexos em formato de tabela
+                Forms\Components\Section::make('Anexos do Requerimento')
                 
-                Forms\Components\Select::make('tipo_requerimento')
-                ->label('Tipo')
-                ->options(function (Forms\Get $get) {
-                    $requerimentoId = $get('requerimento_id');
-                    if (!$requerimentoId) {
-                        return [];
-                    }
+                ->schema([
+                    Forms\Components\Grid::make()
+                        ->schema([
+                            Forms\Components\View::make('anexos-table')
+                                ->hidden(fn (Forms\Get $get) => empty($get('_anexos')))
+                                ->columnSpanFull(),
+                        ])
+                ])
+                ->hidden(fn (Forms\Get $get) => empty($get('_anexos')))
+                ->columnSpanFull(),
+                   
+              
+                // Seção para exibir informações complementares
+                Forms\Components\Section::make('Informações Complementares')
+                ->schema([
+                    Forms\Components\Textarea::make('informacao_complementar_descricao')
+                        ->label('')
+                        ->disabled()
+                        ->rows(7)
+                       
+                        ->columnSpanFull(),
+                ])
+                ->hidden(fn (Forms\Get $get) => empty($get('informacao_complementar_descricao')))
+                ->columnSpanFull(),
                     
-                    $requerimento = \App\Models\Requerimento::find($requerimentoId);
-                    return [$requerimento->tipo_requerimento_id => $requerimento->tipo_requerimento->descricao]; // Ajuste conforme sua relação
-                })
-                ->required()
-                ->disabled(),
                 Forms\Components\Textarea::make('descricao')
+                    ->label('Descrição do acompanhamento')
                     ->required()
                     ->columnSpanFull(),
+
+                    Forms\Components\FileUpload::make('anexos')
+                    ->label('Anexos')
+                    ->multiple()
+                    ->directory('acompanhamentos/temp')
+                    ->preserveFilenames()
+                    ->downloadable()
+                    ->openable()
+                    ->acceptedFileTypes([
+                        'application/pdf',
+                        'image/*',
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                    ])
+                    ->maxSize(5120) // 5MB
+                    ->columnSpanFull(),
+                    
                 Forms\Components\Toggle::make('finalizador')
                     ->label('Finalizar Requerimento?')
                     ->onColor('success')
@@ -80,23 +153,30 @@ class AcompanhamentoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-                ->columns([
-                    Tables\Columns\TextColumn::make('requerimento.descricao')
-                        ->limit(30)
-                        ->searchable()
-                        ->sortable(),
-                    Tables\Columns\TextColumn::make('descricao')
-                        ->limit(30)
-                        ->searchable(),
-                    Tables\Columns\TextColumn::make('user.name')
-                        ->label('Usuário')
-                        ->searchable(),
-                    Tables\Columns\IconColumn::make('finalizador')
-                        ->label('Finalizado?')
-                        ->boolean(),
-                    Tables\Columns\TextColumn::make('created_at')
-                        ->dateTime()
-                        ->sortable(),
+            ->striped()
+            ->columns([
+                Tables\Columns\TextColumn::make('requerimento')
+                    ->label('Requerimento - Discente - Tipo Requerimento')
+                    ->formatStateUsing(function ($record) {
+                        return "{$record->requerimento->id} - {$record->requerimento->discente->nome} - {$record->requerimento->tipo_requerimento->descricao}";
+                    })
+                    ->searchable(['requerimento.id', 'requerimento.discente.nome', 'requerimento.tipo_requerimento.descricao'])
+                    ->sortable()
+                    ->limit(50),
+                Tables\Columns\TextColumn::make('descricao')
+                ->label('Descrição')
+                    ->limit(30)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Usuário')
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('finalizador')
+                    ->label('Finalizado?')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Data de Criação')
+                    ->dateTime(format: 'd/m/Y H:i')
+                    ->sortable(),
             ])
             ->filters([
                 //Tables\Filters\TrashedFilter::make(),
@@ -117,7 +197,7 @@ class AcompanhamentoResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\AnexosRelationManager::class,
         ];
     }
 

@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('acompanhamentos', function (Blueprint $table) {
+        Schema::create('anexo_acomps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('requerimento_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Alterado para user_id
-            $table->text('descricao');
+            $table->foreignId('acompanhamento_id')->constrained()->onDelete('cascade');
+            $table->string('caminho');
+            $table->string('nome_original');
+            $table->string('mime_type')->nullable();
+            $table->unsignedInteger('tamanho')->nullable();
             $table->softDeletes();
-            $table->boolean('finalizador')->default(false); // Adicionado campo para marcar como finalizador
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('acompanhamentos');
+        Schema::dropIfExists('anexo_acomps');
     }
 };

@@ -15,7 +15,7 @@ class infor_complement extends Model
 
     protected $fillable = [
         'id',
-        'id_requerimento',
+        'requerimento_id',
         'descricao',
         'status',
         
@@ -29,6 +29,6 @@ class infor_complement extends Model
     }
     public function requerimento(): BelongsTo
     {
-        return $this->belongsTo(Requerimento::class, 'id_requerimento');
+        return $this->belongsTo(Requerimento::class, 'requerimento_id');
     }
 }

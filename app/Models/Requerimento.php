@@ -46,7 +46,8 @@ class Requerimento extends Model
  
      public function informacaoComplementar()
      {
-         return $this->hasOne(infor_complement::class, 'id_requerimento', 'id');
+         return $this->hasOne(infor_complement::class, 'requerimento_id', 'id');
+         //return $this->hasOne(infor_complement::class);
      }
          // Adicione dentro da classe
      public function acompanhamentos(): HasMany

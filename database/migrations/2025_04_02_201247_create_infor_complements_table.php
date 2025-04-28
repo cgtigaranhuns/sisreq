@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('infor_complements', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_requerimento');
+            $table->unsignedBigInteger('requerimento_id');
             $table->string('descricao');
             $table->string('status');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('id_requerimento')->references('id')->on('requerimentos');
+            $table->foreign('requerimento_id')->references('id')->on('requerimentos');
         });
     }
 

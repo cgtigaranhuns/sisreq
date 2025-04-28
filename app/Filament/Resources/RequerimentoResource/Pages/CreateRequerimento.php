@@ -66,7 +66,7 @@ class CreateRequerimento extends CreateRecord
             !empty($this->data['descricao_complementar'])) {
             
             infor_complement::create([
-                'id_requerimento' => $this->record->id,
+                'requerimento_id' => $this->record->id,
                 'descricao' => $this->data['descricao_complementar'],
                // 'status' => $this->data['status_complementar'] ?? 'pendente',
             ]);

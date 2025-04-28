@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\RequerimentoResource\RelationManagers;
+namespace App\Filament\Resources\AcompanhamentoResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -20,7 +20,7 @@ class AnexosRelationManager extends RelationManager
             ->schema([
                 Forms\Components\FileUpload::make('caminho')
                     ->label('Arquivo')
-                    ->directory('requerimentos/anexos')
+                    ->directory('anexos/acompanhamento')
                     ->preserveFilenames()
                     ->downloadable()
                     ->openable()
