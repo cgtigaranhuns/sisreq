@@ -57,6 +57,12 @@ class Acompanhamento extends Model
         static::updated(function ($acompanhamento) {
             $acompanhamento->atualizarStatusRequerimento();
         });
+        static::deleted(function ($acompanhamento) {
+            // Atualiza especificamente para "em_analise" quando deletado
+            if ($acompanhamento->requerimento) {
+                $acompanhamento->requerimento()->update(['status' => 'em_analise']);
+            }
+        });
     }
 
     protected function atualizarStatusRequerimento()
