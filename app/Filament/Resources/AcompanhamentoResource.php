@@ -155,15 +155,31 @@ class AcompanhamentoResource extends Resource
         return $table
             ->striped()
             ->columns([
-                Tables\Columns\TextColumn::make('requerimento')
+                /*Tables\Columns\TextColumn::make('requerimento')
                     ->label('Requerimento - Discente - Tipo Requerimento')
                     ->formatStateUsing(function ($record) {
                         return "{$record->requerimento->id} - {$record->requerimento->discente->nome} - {$record->requerimento->tipo_requerimento->descricao}";
                     })
                     ->searchable(['requerimento.id', 'requerimento.discente.nome', 'requerimento.tipo_requerimento.descricao'])
                     ->sortable()
+                    ->limit(50),*/
+                    Tables\Columns\TextColumn::make('requerimento_id')
+                    ->label('#')
+                    
+                    ->searchable()
+                    ->sortable()
+                    ,
+                    Tables\Columns\TextColumn::make('requerimento.tipo_requerimento.descricao')
+                    ->label('Tipo Requerimento')
+                    
+                    ->searchable()
+                    ->sortable()
                     ->limit(50),
-                Tables\Columns\TextColumn::make('descricao')
+                    Tables\Columns\TextColumn::make('requerimento.discente.nome')
+                   
+                    ->sortable()
+                    ->limit(50),
+               /* Tables\Columns\TextColumn::make('descricao')
                 ->label('Descrição')
                     ->limit(30)
                     ->searchable(),
@@ -173,9 +189,21 @@ class AcompanhamentoResource extends Resource
                 Tables\Columns\IconColumn::make('finalizador')
                     ->label('Finalizado?')
                     ->aligncenter()
-                    ->boolean(),
+                    ->boolean(),*/
+                    Tables\Columns\TextColumn::make('requerimento.status')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'em_analise' => 'Em Análise',
+                        'finalizado' => 'Finalizado',
+                        default => $state,})
+                    ->color(fn (string $state): string => match ($state) {
+                        'pendente' => 'danger',
+                        'em_analise' => 'warning',
+                        'finalizado' => 'success',
+                    })
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Data de Criação')
+                    ->label('Data de Acomp.')
                     ->dateTime(format: 'd/m/Y H:i')
                     ->sortable(),
             ])
@@ -183,8 +211,10 @@ class AcompanhamentoResource extends Resource
                 //Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                ->label(''),
+                Tables\Actions\EditAction::make()
+                ->label(''),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
