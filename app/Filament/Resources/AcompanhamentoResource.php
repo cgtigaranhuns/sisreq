@@ -172,6 +172,7 @@ class AcompanhamentoResource extends Resource
                     ->searchable(),
                 Tables\Columns\IconColumn::make('finalizador')
                     ->label('Finalizado?')
+                    ->aligncenter()
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Data de Criação')
