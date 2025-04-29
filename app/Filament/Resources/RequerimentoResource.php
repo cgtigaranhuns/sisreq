@@ -57,7 +57,12 @@ class RequerimentoResource extends Resource
                      ) ,
                 Forms\Components\Select::make('tipo_requerimento_id')
                     ->label('Tipo do Requerimento')
-                    ->relationship('tipo_requerimento', 'descricao')
+                    ->relationship(
+                        'tipo_requerimento', 
+                        'descricao',
+                        fn (Builder $query) => $query->where('status', 1)  // Filtra apenas os ativos
+                    )
+                    //->relationship('tipo_requerimento', 'descricao')
                     ->required()
                     ->searchable()
                     ->preload()
