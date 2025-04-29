@@ -36,7 +36,7 @@ class Requerimento extends Model
     // Relacionamento com Curso
     public function tipo_requerimento()
     {
-        return $this->belongsTo(Tipo_requerimento::class);
+        return $this->belongsTo(TipoRequerimento::class);
     }
 
      // Status possíveis
