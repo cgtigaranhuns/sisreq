@@ -50,7 +50,7 @@ class Requerimento extends Model
          //return $this->hasOne(infor_complement::class);
      }
          // Adicione dentro da classe
-     public function acompanhamentos(): HasMany
+     public function acompanhamentos()
      {
          return $this->hasMany(Acompanhamento::class);
      }

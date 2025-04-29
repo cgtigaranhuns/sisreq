@@ -18,13 +18,13 @@ class AnexosRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\FileUpload::make('caminho')
+           /*     Forms\Components\FileUpload::make('caminho')
                     ->label('Arquivo')
                     ->directory('anexos/acompanhamento')
                     ->preserveFilenames()
                     ->downloadable()
                     ->openable()
-                    ->required(),
+                    ->required(),*/
             ]);
     }
 

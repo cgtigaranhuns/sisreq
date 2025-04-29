@@ -156,9 +156,25 @@ class AcompanhamentoResource extends Resource
             ->striped()
             ->modifyQueryUsing(function (Builder $query) {
                 $query->where('deleted_at', null); 
+
+                $user = auth()->user();
+            
+            if ($user->hasRole('Discente')) {
+                $query->whereHas('requerimento', function($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                })->orderBy('id', 'desc');
+            }
                 
             })
             ->columns([
+                 Tables\Columns\TextColumn::make('requerimento')
+                    ->label('# - Tipo Requerimento')
+                    ->formatStateUsing(function ($record) {
+                        return "{$record->requerimento->id}  - {$record->requerimento->tipo_requerimento->descricao}";
+                    })
+                    ->searchable(['requerimento.id',  'requerimento.tipo_requerimento.descricao'])
+                    ->sortable()
+                    ->limit(50),
                 /*Tables\Columns\TextColumn::make('requerimento')
                     ->label('Requerimento - Discente - Tipo Requerimento')
                     ->formatStateUsing(function ($record) {
@@ -167,7 +183,7 @@ class AcompanhamentoResource extends Resource
                     ->searchable(['requerimento.id', 'requerimento.discente.nome', 'requerimento.tipo_requerimento.descricao'])
                     ->sortable()
                     ->limit(50),*/
-                    Tables\Columns\TextColumn::make('requerimento_id')
+                  /*  Tables\Columns\TextColumn::make('requerimento_id')
                     ->label('#')
                     
                     ->searchable()
@@ -178,7 +194,7 @@ class AcompanhamentoResource extends Resource
                     
                     ->searchable()
                     ->sortable()
-                    ->limit(50),
+                    ->limit(50),*/
                     Tables\Columns\TextColumn::make('requerimento.discente.nome')
                    
                     ->sortable()
@@ -261,5 +277,15 @@ class AcompanhamentoResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+
+            $user = auth()->user();
+      
+    if ($user->hasRole('Discente')) {
+        $query->whereHas('requerimento', function($q) use ($user) {
+            $q->where('user_id', $user->id);
+        })->orderBy('id', 'desc');
+    }
+    
+    return $query;
     }
 }

@@ -229,6 +229,7 @@ class RequerimentoResource extends Resource
         return [
             RelationManagers\AnexosRelationManager::class,
             RelationManagers\InformacaoComplementarRelationManager::class,
+            RelationManagers\AcompanhamentosRelationManager::class,
         ];
     }
 
