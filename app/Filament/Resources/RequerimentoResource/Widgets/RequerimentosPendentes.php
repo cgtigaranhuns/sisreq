@@ -74,9 +74,13 @@ class RequerimentosPendentes extends BaseWidget
     {
         return [
             ViewAction::make()
+            ->label('')
+            ->tooltip('Visualizar')
                 ->url(fn (Requerimento $record): string => RequerimentoResource::getUrl('view', ['record' => $record])),
             
             EditAction::make()
+            ->label('')
+            ->tooltip('Editar')
                 ->url(fn (Requerimento $record): string => RequerimentoResource::getUrl('edit', ['record' => $record])),
             
             DeleteAction::make()
@@ -85,6 +89,8 @@ class RequerimentosPendentes extends BaseWidget
                 ->modalButton('Excluir')
                 ->modalWidth('md')
                 ->requiresConfirmation()
+                ->label('')
+                ->tooltip('Excluir')
                 ->action(fn (Requerimento $record) => $record->delete()),
         ];
     }

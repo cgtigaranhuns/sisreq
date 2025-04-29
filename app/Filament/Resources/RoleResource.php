@@ -66,8 +66,21 @@ class RoleResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                ->label('')
+                ->tooltip('Visualizar'),
+                Tables\Actions\EditAction::make()
+                ->label('')
+                ->tooltip('Editar'),
+                // Ação de exclusão
+                Tables\Actions\DeleteAction::make()
+                    ->modalHeading('Tem certeza?')
+                    ->modalDescription('Essa ação não pode ser desfeita.')
+                    ->modalButton('Excluir')
+                    ->modalWidth('md') // ✅ Correção: Usando o enum corretamente
+                    ->label('')
+                    ->tooltip('Excluir')
+                    ->requiresConfirmation(), // Se deseja confirmação antes de excluir*/
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

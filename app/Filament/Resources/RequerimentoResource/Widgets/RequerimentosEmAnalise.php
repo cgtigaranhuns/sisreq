@@ -81,6 +81,8 @@ class RequerimentosEmAnalise extends BaseWidget
         return [
             // Ação de visualização
             ViewAction::make()
+            ->label('')
+            ->tooltip('Visualizar')
             ->url(fn (Requerimento $record): string => RequerimentoResource::getUrl('view', ['record' => $record])),
             
             // Ação de edição

@@ -7,7 +7,7 @@ use App\Filament\Resources\RequerimentoResource\RelationManagers;
 use App\Filament\Resources\RequerimentoResource\Pages\ListRequerimentos;
 use App\Models\Requerimento;
 use App\Models\Discente;
-use App\Models\Tipo_requerimento;
+use App\Models\TipoRequerimento;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -64,14 +64,14 @@ class RequerimentoResource extends Resource
                     ->live() // Adiciona reactividade
                     ->afterStateUpdated(function ($state, Forms\Set $set) {
                         if ($state) {
-                            $tipoRequerimento = Tipo_requerimento::find($state);
+                            $tipoRequerimento = TipoRequerimento::find($state);
                             $set('anexo', $tipoRequerimento->anexo ?? '');
                             $set('descricao_complementar', $tipoRequerimento->template ?? '');
                             // Define o estado do toggle com base no valor de infor_complementares
                             $set('tem_informacoes_complementares', $tipoRequerimento->infor_complementares ?? false);
                         }
                     }),
-                    Textarea::make('observacoes')
+                Textarea::make('observacoes')
                     ->label('Observações' )
                     ->rows(7)
                    

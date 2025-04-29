@@ -232,9 +232,11 @@ class AcompanhamentoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
-                ->label(''),
+                ->label('')
+                ->tooltip('Visualizar'),
                 Tables\Actions\EditAction::make()
-                ->label(''),
+                ->label('')
+                ->tooltip('Editar'),
                 // Ação de exclusão
                 Tables\Actions\DeleteAction::make()
                     ->modalHeading('Tem certeza?')
