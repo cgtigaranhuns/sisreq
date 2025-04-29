@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TipoRequerimentoResource\Pages;
 use App\Filament\Resources\TipoRequerimentoResource\RelationManagers;
-use App\Models\Tipo_requerimento;
+use App\Models\TipoRequerimento;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Textarea;
@@ -16,13 +16,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TipoRequerimentoResource extends Resource
 {
-    protected static ?string $model = Tipo_requerimento::class;
+    protected static ?string $model = TipoRequerimento::class;
 
     protected static ?string $navigationGroup = 'Cadastros';
     protected static ?int $navigationSort = 3;
     protected static ?string $navigationIcon = 'heroicon-s-newspaper';
     protected static ?string $navigationLabel = 'Tipos de Requerimentos';
-    protected static ?string $slug = 'T_requeirimentos';
+    //protected static ?string $slug = 'T_requerimentos';
     protected static ?string $pluralModelLabel = 'Tipos de Requerimentos';
 
     public static function form(Form $form): Form

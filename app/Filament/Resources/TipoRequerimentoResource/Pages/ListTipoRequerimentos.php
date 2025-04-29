@@ -9,7 +9,7 @@ use Filament\Resources\Pages\ListRecords;
 class ListTipoRequerimentos extends ListRecords
 {
     protected static string $resource = TipoRequerimentoResource::class;
-
+    protected static ?string $title = 'Tipos de Requerimento';
     protected function getHeaderActions(): array
     {
         return [

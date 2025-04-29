@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Tipo_requerimento extends Model
+class TipoRequerimento extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
 

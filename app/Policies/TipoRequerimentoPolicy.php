@@ -6,14 +6,14 @@ use App\Models\Tipo_requerimento;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class Tipo_RequerimentoPolicy
+class TipoRequerimentoPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('Ver Tipo de Requerimento');
+        return $user->hasPermissionTo('Ver Tipo Requerimento');
     }
 
     /**
@@ -21,7 +21,7 @@ class Tipo_RequerimentoPolicy
      */
     public function view(User $user, Tipo_requerimento $tipoRequerimento): bool
     {
-        return $user->hasPermissionTo('Ver Tipo de Requerimento');
+        return $user->hasPermissionTo('Ver Tipo Requerimento');
     }
 
     /**
@@ -29,7 +29,7 @@ class Tipo_RequerimentoPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('Criar Tipo de Requerimento');
+        return $user->hasPermissionTo('Criar Tipo Requerimento');
     }
 
     /**
@@ -37,7 +37,7 @@ class Tipo_RequerimentoPolicy
      */
     public function update(User $user, Tipo_requerimento $tipoRequerimento): bool
     {
-        return $user->hasPermissionTo('Alterar Tipo de Requerimento');
+        return $user->hasPermissionTo('Alterar Tipo Requerimento');
     }
 
     /**
@@ -45,7 +45,7 @@ class Tipo_RequerimentoPolicy
      */
     public function delete(User $user, Tipo_requerimento $tipoRequerimento): bool
     {
-        return $user->hasPermissionTo('Deletar Tipo de Requerimento');
+        return $user->hasPermissionTo('Deletar Tipo Requerimento');
     }
 
     
