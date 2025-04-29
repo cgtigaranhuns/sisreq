@@ -143,7 +143,7 @@ class RequerimentoResource extends Resource
                             return true;
                         }
                         
-                        $tipoRequerimento = Tipo_requerimento::find($tipoId);
+                        $tipoRequerimento = TipoRequerimento::find($tipoId);
                         return $tipoRequerimento->anexo === null;
                     }),
             ]);
