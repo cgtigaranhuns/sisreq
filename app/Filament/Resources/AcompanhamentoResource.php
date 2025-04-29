@@ -26,6 +26,18 @@ class AcompanhamentoResource extends Resource
 
     public static function form(Form $form): Form
     {
+
+        $requerimentoId = request()->input('requerimento_id');
+        $defaultValues = [];
+        if ($requerimentoId) {
+           $requerimento = Requerimento::find($requerimentoId);
+            $defaultValues = [
+                'requerimentoId' => $requerimentoId,
+                'discente' => request()->input('requerimento_id'),
+             //   'tipo_requerimento' => 'tipo_requerimento' . $rendaFixa->descrição,
+             //   'observacoes' => request()->input('requerimento_id'),
+            ];
+        }
         return $form
             ->schema([
                 Forms\Components\Hidden::make('user_id')

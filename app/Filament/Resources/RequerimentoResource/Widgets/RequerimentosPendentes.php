@@ -10,6 +10,8 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
 use App\Filament\Resources\RequerimentoResource;
+use App\Filament\Resources\AcompanhamentoResource;
+use Filament\Tables\Actions\Action;
 
 class RequerimentosPendentes extends BaseWidget
 {
@@ -73,6 +75,25 @@ class RequerimentosPendentes extends BaseWidget
     protected function getTableActions(): array
     {
         return [
+            Action::make('acompanhamento')
+            ->label('')
+            ->icon('heroicon-s-ticket')
+            ->color('warning')
+            ->requiresConfirmation() 
+            ->modalHeading('Confirmar Acompanhamento')
+            ->modalDescription('Deseja realmente iniciar o Acompanhamento deste requerimento?')
+            ->modalSubmitActionLabel('Confirmar')
+            ->modalCancelActionLabel('Cancelar')
+            ->action(function (Requerimento $record) {
+                return redirect()->to(
+                    AcompanhamentoResource::getUrl('create', [
+                        'requerimento_id' => $record->id,
+                        'discente' => $record->discente->nome,
+                        'tipo_requerimento' => $record->tipo_requerimento->descricao,
+                       // 'observacoes' => $record->observacoes,
+                    ])
+                );
+            }),
             ViewAction::make()
             ->label('')
             ->tooltip('Visualizar')
