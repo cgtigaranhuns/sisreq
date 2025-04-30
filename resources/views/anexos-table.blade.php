@@ -1,8 +1,13 @@
+@props(['anexos' => []])
+
 @php
-$anexos = $this->form->getRawState()['_anexos'] ?? [];
+use Illuminate\Support\Facades\Storage;
+
+// Fallback para compatibilidade com formulário Livewire, se necessário
+$anexos = $anexos ?: ($this->form->getRawState()['_anexos'] ?? []);
 @endphp
 
-<div x-data="{ open: false, fileUrl: '' }">
+<div x-data="{ open: false, fileUrl: '', fileName: '' }">
     <style>
     .fi-ta {
         width: 100%;
@@ -50,7 +55,7 @@ $anexos = $this->form->getRawState()['_anexos'] ?? [];
     }
     </style>
 
-    @if(!empty($anexos))
+    @if (!empty($anexos))
     <div class="fi-ta">
         <div class="overflow-x-auto w-full">
             <table class="w-full">
@@ -62,24 +67,37 @@ $anexos = $this->form->getRawState()['_anexos'] ?? [];
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($anexos as $anexo)
+                    @foreach ($anexos as $anexo)
+                    @php
+                    $caminho = $anexo['caminho'];
+                    $nomeOriginal = $anexo['nome_original'];
+                    $fullPath = storage_path("app/public/{$caminho}");
+                    $fileExists = file_exists($fullPath);
+                    $url = Storage::url($caminho);
+                    $sizeKb = $fileExists ? round(filesize($fullPath) / 1024, 2) : null;
+                    @endphp
                     <tr>
-                        <td>{{ $anexo['nome_original'] }}</td>
-                        <td>{{ round(filesize(storage_path('app/public/' . $anexo['caminho'])) / 1024, 2) }} KB</td>
+                        <td>{{ $nomeOriginal }}</td>
+                        <td>
+                            {{ $fileExists ? "{$sizeKb} KB" : 'Arquivo não encontrado' }}
+                        </td>
                         <td class="text-center">
                             <div class="flex justify-center space-x-2">
-                                <!-- Botão Visualizar -->
+                                @if ($fileExists)
+                                <!-- Visualizar -->
                                 <button type="button"
-                                    @click="fileUrl = '{{ asset('storage/' . $anexo['caminho']) }}'; open = true"
+                                    @click="fileUrl = {{ json_encode(asset($url)) }}; fileName = {{ json_encode($nomeOriginal) }}; open = true"
                                     class="text-primary-600 hover:text-primary-700">
                                     <x-heroicon-s-eye class="w-6 h-6" />
                                 </button>
 
-                                <!-- Botão Download -->
-                                <a href="{{ asset('storage/' . $anexo['caminho']) }}" download
-                                    class="text-green-600 hover:text-green-700">
+                                <!-- Download -->
+                                <a href="{{ asset($url) }}" download class="text-green-600 hover:text-green-700">
                                     <x-heroicon-s-arrow-down-tray class="w-6 h-6" />
                                 </a>
+                                @else
+                                <span class="text-red-500 text-sm">Arquivo indisponível</span>
+                                @endif
                             </div>
                         </td>
                     </tr>
@@ -89,24 +107,21 @@ $anexos = $this->form->getRawState()['_anexos'] ?? [];
         </div>
     </div>
 
-    <!-- Modal de Visualização - Altura Aumentada -->
+    <!-- Modal -->
     <div x-show="open" style="display: none;"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999] p-4" x-transition>
         <div class="bg-white rounded-lg overflow-hidden shadow-xl max-w-4xl w-full flex flex-col" style="height: 85vh;">
             <!-- Cabeçalho -->
             <div class="flex justify-between items-center p-4 border-b">
-                <h2 class="text-lg font-semibold text-gray-800">Visualizar Anexo: <span x-text="fileName"
-                        class="font-medium"></span></h2>
+                <h2 class="text-lg font-semibold text-gray-800">
+                    Visualizar Anexo: <span x-text="fileName" class="font-medium"></span>
+                </h2>
                 <button @click="open = false" class="text-gray-500 hover:text-gray-700 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <x-heroicon-s-x-mark class="w-6 h-6" />
                 </button>
             </div>
 
-            <!-- Área de Conteúdo -->
+            <!-- Conteúdo -->
             <div class="flex-1 overflow-hidden bg-gray-50">
                 <iframe :src="fileUrl" class="w-full h-full border-0" style="min-height: calc(85vh - 64px);"></iframe>
             </div>
@@ -115,11 +130,7 @@ $anexos = $this->form->getRawState()['_anexos'] ?? [];
             <div class="flex justify-end items-center p-3 border-t bg-white">
                 <a :href="fileUrl" download
                     class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors mr-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
+                    <x-heroicon-s-arrow-down-tray class="w-5 h-5 mr-2" />
                     Download
                 </a>
                 <button @click="open = false"
@@ -129,7 +140,9 @@ $anexos = $this->form->getRawState()['_anexos'] ?? [];
             </div>
         </div>
     </div>
-
-
+    @else
+    <div class="fi-ta">
+        <p class="text-gray-500 text-sm py-2">Nenhum anexo encontrado.</p>
+    </div>
     @endif
 </div>

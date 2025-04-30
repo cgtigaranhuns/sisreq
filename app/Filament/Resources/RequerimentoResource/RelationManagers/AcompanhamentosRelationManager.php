@@ -29,6 +29,8 @@ class AcompanhamentosRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('Acompanhamentos')
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('#'),
                  Tables\Columns\TextColumn::make('descricao')
                     ->label('Descrição')
                     ->limit(30)

@@ -77,20 +77,18 @@ class RequerimentosPendentes extends BaseWidget
         return [
             Action::make('acompanhamento')
             ->label('')
+            ->tooltip('Acompanhamento')
             ->icon('heroicon-s-ticket')
             ->color('warning')
             ->requiresConfirmation() 
             ->modalHeading('Confirmar Acompanhamento')
-            ->modalDescription('Deseja realmente iniciar o Acompanhamento deste requerimento?')
+            ->modalDescription('Deseja realmente iniciar o Acompanhamento deste Requerimento?')
             ->modalSubmitActionLabel('Confirmar')
             ->modalCancelActionLabel('Cancelar')
             ->action(function (Requerimento $record) {
                 return redirect()->to(
                     AcompanhamentoResource::getUrl('create', [
-                        'requerimento_id' => $record->id,
-                        'discente' => $record->discente->nome,
-                        'tipo_requerimento' => $record->tipo_requerimento->descricao,
-                       // 'observacoes' => $record->observacoes,
+                        'requerimento_id' => $record->id
                     ])
                 );
             }),

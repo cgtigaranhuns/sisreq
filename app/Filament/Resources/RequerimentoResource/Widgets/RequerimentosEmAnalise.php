@@ -12,6 +12,8 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
 use App\Filament\Resources\RequerimentoResource;
+use App\Filament\Resources\AcompanhamentoResource;
+
 
 class RequerimentosEmAnalise extends BaseWidget
 {
@@ -79,6 +81,23 @@ class RequerimentosEmAnalise extends BaseWidget
     protected function getTableActions(): array
     {
         return [
+            Action::make('acompanhamento')
+            ->label('')
+            ->tooltip('Acompanhamento')
+            ->icon('heroicon-s-ticket')
+            ->color('warning')
+            ->requiresConfirmation() 
+            ->modalHeading('Confirmar Acompanhamento')
+            ->modalDescription('Deseja realmente iniciar o Acompanhamento deste Requerimento?')
+            ->modalSubmitActionLabel('Confirmar')
+            ->modalCancelActionLabel('Cancelar')
+            ->action(function (Requerimento $record) {
+                return redirect()->to(
+                    AcompanhamentoResource::getUrl('create', [
+                        'requerimento_id' => $record->id
+                    ])
+                );
+            }),
             // Ação de visualização
             ViewAction::make()
             ->label('')

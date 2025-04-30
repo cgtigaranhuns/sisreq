@@ -87,11 +87,23 @@ class ViewAcompanhamento extends ViewRecord
                             }
                             return 'Nenhum requerimento associado';
                         }),
+                        Forms\Components\View::make('anexos-table')
+                        ->viewData([
+                            'anexos' => $this->getRecord()->requerimento->anexos->map(function ($anexo) {
+                                $fullPath = storage_path('app/public/' . $anexo->caminho);
+                                return [
+                                    'nome_original' => $anexo->nome_original,
+                                    'caminho' => $anexo->caminho,
+                                    'tamanho' => file_exists($fullPath) ? filesize($fullPath) : 0,
+                                    'url' => asset('storage/' . $anexo->caminho)
+                                ];
+                            })->toArray()
+                        ])
+                        ->columnSpanFull(),
                    
                 ])
                 ->columns(2),
-                
-            Forms\Components\Section::make('Acompanhamento')
+                Forms\Components\Section::make('Acompanhamento')
                 ->schema([
                     Forms\Components\Textarea::make('descricao')
                         ->label('Descrição')

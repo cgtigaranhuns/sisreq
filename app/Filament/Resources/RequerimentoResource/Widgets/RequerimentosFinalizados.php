@@ -79,6 +79,7 @@ class RequerimentosFinalizados extends BaseWidget
     protected function getTableActions(): array
     {
         return [
+           
             // Ação de visualização
             ViewAction::make()
             ->label('')
