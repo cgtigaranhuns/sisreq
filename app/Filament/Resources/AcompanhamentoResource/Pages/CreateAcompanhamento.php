@@ -5,7 +5,7 @@ namespace App\Filament\Resources\AcompanhamentoResource\Pages;
 use App\Filament\Resources\AcompanhamentoResource;
 use Filament\Actions;
 use App\Models\acompanhamentos;
-use App\Models\AnexoAComp;
+use App\Models\AnexoAcomp;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Storage;
 
