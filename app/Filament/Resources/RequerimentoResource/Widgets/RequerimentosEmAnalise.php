@@ -83,6 +83,7 @@ class RequerimentosEmAnalise extends BaseWidget
         return [
             Action::make('acompanhamento')
             ->label('')
+            ->hidden(auth()->user()->hasRole('Discente') ?? false)
             ->tooltip('Acompanhamento')
             ->icon('heroicon-s-ticket')
             ->color('warning')
