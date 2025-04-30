@@ -316,8 +316,8 @@ class AcompanhamentoResource extends Resource
                 
             })
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                ->label('#'),
+               // Tables\Columns\TextColumn::make('id')
+               // ->label('#'),
                  Tables\Columns\TextColumn::make('requerimento')
                     ->label('ID - Tipo Requerimento')
                     ->formatStateUsing(function ($record) {
