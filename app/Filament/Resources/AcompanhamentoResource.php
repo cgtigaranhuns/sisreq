@@ -182,7 +182,7 @@ class AcompanhamentoResource extends Resource
                         if (!$state) {
                             return;
                         }
-                        
+                           
                         $requerimento = Requerimento::with([
                             'discente',
                             'tipo_requerimento',
