@@ -168,7 +168,11 @@ class AcompanhamentoResource extends Resource
                 Forms\Components\Select::make('requerimento_id')
                     ->default($requerimentoId ?? null)
                     ->disabled($requerimentoId ?? false)
-                    ->relationship('requerimento', 'id')
+                    ->relationship(
+                        name: 'requerimento', 
+                        titleAttribute: 'id',
+                        modifyQueryUsing: fn (Builder $query) => $query->where('status', '!=', 'finalizado')->where('deleted_at', null) 
+                    )
                     ->required()
                     ->live()
                     ->getOptionLabelFromRecordUsing(function ($record) {
@@ -442,6 +446,16 @@ class AcompanhamentoResource extends Resource
         })->orderBy('id', 'desc');
     }
     
-    return $query;
+    return $query->where('status', '!=', 'finalizado');
     }
+
+    protected function getTableQuery(): Builder
+{
+    return parent::getTableQuery()
+        ->whereHas('requerimento', function($query) {
+            $query->where('status', '!=', 'finalizado');
+            // ou, se status estiver em outra tabela:
+            // $query->where('tipo_requerimento.status', '!=', 'finalizado');
+        });
+}
 }
