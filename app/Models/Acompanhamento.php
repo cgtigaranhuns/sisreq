@@ -17,7 +17,8 @@ class Acompanhamento extends Model
         'requerimento_id',
         'user_id',
         'descricao',
-        'finalizador'
+        'finalizador',
+        'processo'
     ];
     public function getActivitylogOptions(): LogOptions
     {

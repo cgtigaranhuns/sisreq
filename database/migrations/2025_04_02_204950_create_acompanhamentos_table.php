@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('requerimento_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Alterado para user_id
             $table->text('descricao');
-            $table->softDeletes();
+            $table->boolean('processo')->default(false); // Adicionado campo para marcar como finalizador
             $table->boolean('finalizador')->default(false); // Adicionado campo para marcar como finalizador
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -6,6 +6,12 @@ use Illuminate\Support\ServiceProvider;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationGroup;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Requerimento;
+use App\Observers\RequerimentoObserver;
+use App\Models\Acompanhamento;
+use App\Observers\AcompanhamentoObserver;
+
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +35,8 @@ class AppServiceProvider extends ServiceProvider
         Storage::disk('public')->buildTemporaryUrlsUsing(function ($path, $expiration, $options) {
             return Storage::temporaryUrl($path, $expiration, $options);
         });
+
+        Requerimento::observe(RequerimentoObserver::class);
+        Acompanhamento::observe(AcompanhamentoObserver::class);
     }
 }
