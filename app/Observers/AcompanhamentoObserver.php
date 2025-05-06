@@ -3,67 +3,51 @@
 namespace App\Observers;
 
 use App\Models\Acompanhamento;
-use App\Mail\Acompanhamento as MailAcompanhamento;
+use App\Mail\AcompanhamentoNotificacao;
 use Illuminate\Support\Facades\Mail;
 
 class AcompanhamentoObserver
 {
-    /**
-     * Handle the Acompanhamento "created" event.
-     */
-    public function created(Acompanhamento $acompanhamento): void
+    // Disparado quando um novo acompanhamento é criado
+    public function created(Acompanhamento $acompanhamento)
     {
-         // Dispara se o status do requerimento foi alterado
-        // if ($acompanhamento->isDirty('status')) {
-            $requerimento = $acompanhamento->requerimento;
-            $discente = $requerimento->discente;
-            $adminEmail = env('MAIL_ADMIN');
-
-            // Envia e-mail para o ADMIN
-            if ($adminEmail) {
-                Mail::to($adminEmail)->send(
-                    new MailAcompanhamento($requerimento, $discente, $acompanhamento, 'admin')
-                );
-            }
-
-            // Envia e-mail para o DISCENTE
-            if ($discente->email) {
-                Mail::to($discente->email)->send(
-                    new MailAcompanhamento($requerimento, $discente, $acompanhamento, 'discente')
-                );
-            }
-       // }
+        $this->enviarEmails($acompanhamento, "Novo acompanhamento criado");
     }
 
-    /**
-     * Handle the Acompanhamento "updated" event.
-     */
-    public function updated(Acompanhamento $acompanhamento): void
+    // Disparado quando um acompanhamento é atualizado
+    public function updated(Acompanhamento $acompanhamento)
     {
-        //
+        if ($acompanhamento->isDirty('descricao') || $acompanhamento->isDirty('finalizador')) {
+            $this->enviarEmails($acompanhamento, "Acompanhamento atualizado");
+        }
     }
 
-    /**
-     * Handle the Acompanhamento "deleted" event.
-     */
-    public function deleted(Acompanhamento $acompanhamento): void
+    private function enviarEmails(Acompanhamento $acompanhamento, string $assuntoBase)
     {
-        //
-    }
+        $requerimento = $acompanhamento->requerimento;
+        $discente = $requerimento->discente;
+        $adminEmail = env('MAIL_ADMIN');
 
-    /**
-     * Handle the Acompanhamento "restored" event.
-     */
-    public function restored(Acompanhamento $acompanhamento): void
-    {
-        //
-    }
+        // Dados para a view
+        $dados = [
+            'requerimento' => $requerimento,
+            'discente' => $discente,
+            'acompanhamento' => $acompanhamento,
+            'assuntoBase' => $assuntoBase
+        ];
 
-    /**
-     * Handle the Acompanhamento "force deleted" event.
-     */
-    public function forceDeleted(Acompanhamento $acompanhamento): void
-    {
-        //
+        // Envia e-mail para o admin
+        if ($adminEmail) {
+            Mail::to($adminEmail)->send(
+                new AcompanhamentoNotificacao($dados, 'admin')
+            );
+        }
+
+        // Envia e-mail para o discente
+        if ($discente->email) {
+            Mail::to($discente->email)->send(
+                new AcompanhamentoNotificacao($dados, 'discente')
+            );
+        }
     }
 }
