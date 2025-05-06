@@ -449,13 +449,5 @@ class AcompanhamentoResource extends Resource
     return $query->where('status', '!=', 'finalizado');
     }
 
-    protected function getTableQuery(): Builder
-{
-    return parent::getTableQuery()
-        ->whereHas('requerimento', function($query) {
-            $query->where('status', '!=', 'finalizado');
-            // ou, se status estiver em outra tabela:
-            // $query->where('tipo_requerimento.status', '!=', 'finalizado');
-        });
-}
+    
 }

@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Filament\Resources\AcompanhamentoResource\Pages;
+namespace App\Filament\Resources\ComunicacaoResource\Pages;
 
-use App\Filament\Resources\AcompanhamentoResource;
+use App\Filament\Resources\ComunicacaoResource;
 use App\Models\Requerimento;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Forms;
 use Filament\Forms\Form;
 
-class ViewAcompanhamento extends ViewRecord
+class ViewComunicacao extends ViewRecord
 {
-    protected static string $resource = AcompanhamentoResource::class;
+    protected static string $resource = ComunicacaoResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            // Actions\EditAction::make(),
+           // Actions\EditAction::make(),
         ];
     }
 
@@ -25,7 +25,7 @@ class ViewAcompanhamento extends ViewRecord
         return $form->schema([
             Forms\Components\Section::make('Informações do Requerimento')
                 ->schema([
-                   
+                  
                         Forms\Components\TextInput::make('tipo_requerimento')
                         ->label('# - Tipo do Requerimento')
                         ->disabled()
@@ -84,27 +84,15 @@ class ViewAcompanhamento extends ViewRecord
                    
                 ])
                 ->columns(2),
-                Forms\Components\Section::make('Acompanhamento')
+                Forms\Components\Section::make('Comunicado')
                 ->schema([
-                    Forms\Components\Textarea::make('descricao')
-                        ->label('Descrição')
+                    Forms\Components\Textarea::make('mensagem')
+                        ->label('Mensagem')
                         ->disabled()
                         ->columnSpanFull()
-                        ->rows(5),
-                        
-                    Forms\Components\Toggle::make('finalizador')
-                        ->label('Finalizar Requerimento?')
-                        ->disabled()
-                        ->onColor('success')
-                        ->offColor('gray'),
+                        ->rows(7),
+
                 ]),
-                
-            // Seção para anexos (se necessário)
-         /*   Forms\Components\Section::make('Anexos')
-                ->schema([
-                    // Adicione aqui os campos de anexos se necessário
-                ])
-                ->hidden(fn ($record) => $record->anexos->isEmpty()),*/
-        ]);
-   }
+            ]);
+        }
 }

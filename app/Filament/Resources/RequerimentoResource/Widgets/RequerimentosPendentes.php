@@ -12,6 +12,7 @@ use Filament\Tables\Actions\DeleteAction;
 use App\Filament\Resources\RequerimentoResource;
 use App\Filament\Resources\AcompanhamentoResource;
 use Filament\Tables\Actions\Action;
+use App\Filament\Resources\ComunicacaoResource;
 
 class RequerimentosPendentes extends BaseWidget
 {
@@ -75,6 +76,24 @@ class RequerimentosPendentes extends BaseWidget
     protected function getTableActions(): array
     {
         return [
+            Action::make('comunicacao')
+            ->label('')
+            ->hidden(auth()->user()->hasRole('Discente') ?? false)
+            ->tooltip('Comunicação')
+            ->icon('heroicon-s-chat-bubble-oval-left-ellipsis')
+            ->color('info')
+            ->requiresConfirmation() 
+            ->modalHeading('Confirmar Comunicação')
+            ->modalDescription('Deseja enviar um comunicado para este Requerimento?')
+            ->modalSubmitActionLabel('Confirmar')
+            ->modalCancelActionLabel('Cancelar')
+            ->action(function (Requerimento $record) {
+                return redirect()->to(
+                    ComunicacaoResource::getUrl('create', [
+                        'requerimento_id' => $record->id
+                    ])
+                );
+            }),
             Action::make('acompanhamento')
             ->label('')
             ->hidden(auth()->user()->hasRole('Discente') ?? false)
