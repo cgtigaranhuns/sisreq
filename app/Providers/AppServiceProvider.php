@@ -10,6 +10,8 @@ use App\Models\Requerimento;
 use App\Observers\RequerimentoObserver;
 use App\Models\Acompanhamento;
 use App\Observers\AcompanhamentoObserver;
+use App\Models\Comunicacao;
+use App\Observers\ComunicacaoObserver;
 
 
 
@@ -38,5 +40,6 @@ class AppServiceProvider extends ServiceProvider
 
         Requerimento::observe(RequerimentoObserver::class);
         Acompanhamento::observe(AcompanhamentoObserver::class);
+        Comunicacao::observe(ComunicacaoObserver::class);
     }
 }
