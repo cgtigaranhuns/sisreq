@@ -295,11 +295,17 @@ class AcompanhamentoResource extends Resource
                     ])
                     ->maxSize(5120) // 5MB
                     ->columnSpanFull(),
-                    
+                Forms\Components\Toggle::make('processo')
+                    ->label('Registro de processo no SEI?')
+                    ->onColor('success')
+                    ->offColor('gray'),
+
                 Forms\Components\Toggle::make('finalizador')
                     ->label('Finalizar Requerimento?')
                     ->onColor('success')
                     ->offColor('gray'),
+
+                
             ]);
     }
 
