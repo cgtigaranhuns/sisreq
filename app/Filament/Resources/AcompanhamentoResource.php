@@ -308,7 +308,7 @@ class AcompanhamentoResource extends Resource
         return $table
             ->striped()
             ->modifyQueryUsing(function (Builder $query) {
-                $query->where('deleted_at', null); 
+                $query->where('deleted_at', null)->orderBy('id', 'desc'); 
 
                 $user = auth()->user();
             
