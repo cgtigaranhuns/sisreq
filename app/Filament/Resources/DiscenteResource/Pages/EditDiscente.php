@@ -5,6 +5,7 @@ namespace App\Filament\Resources\DiscenteResource\Pages;
 use App\Filament\Resources\DiscenteResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Gate;
 
 class EditDiscente extends EditRecord
 {
@@ -19,5 +20,11 @@ class EditDiscente extends EditRecord
             Actions\ForceDeleteAction::make(),
             Actions\RestoreAction::make(),
         ];
+    }
+    public function mount($record): void
+    {
+        parent::mount($record);
+
+        Gate::authorize('update', $this->record);
     }
 }

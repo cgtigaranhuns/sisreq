@@ -5,6 +5,7 @@ namespace App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Support\Facades\Gate;
 
 class ViewUser extends ViewRecord
 {
@@ -16,4 +17,11 @@ class ViewUser extends ViewRecord
             Actions\EditAction::make(),
         ];
     }
+
+    public function mount($record): void
+{
+    parent::mount($record);
+
+    Gate::authorize('view', $this->record);
+}
 }

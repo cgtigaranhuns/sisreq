@@ -5,6 +5,7 @@ namespace App\Filament\Resources\DiscenteResource\Pages;
 use App\Filament\Resources\DiscenteResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListDiscentes extends ListRecords
 {
@@ -17,5 +18,18 @@ class ListDiscentes extends ListRecords
             Actions\CreateAction::make()
             ->label('Novo Dicente'),
         ];
+    }
+
+    protected function getTableQuery(): ?Builder
+    {
+        $query = parent::getTableQuery();
+
+        $user = auth()->user();
+
+        if ($user->hasRole('Discente') && !$user->hasPermissionTo('Ver Todos Discentes')) {
+            $query->where('matricula', $user->matricula);
+        }
+
+        return $query;
     }
 }

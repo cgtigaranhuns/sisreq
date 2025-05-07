@@ -14,6 +14,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
 
 class DiscenteResource extends Resource
 {
@@ -82,13 +84,25 @@ class DiscenteResource extends Resource
     {
         return $table
             ->striped()
+            ->modifyQueryUsing(function (Builder $query) {
+                $query->where('deleted_at', null)->orderBy('id', 'desc'); 
+
+                $user = auth()->user();
+            
+            if ($user->hasRole('Discente')) {
+                $query->where('matricula', $user->matricula)->orderBy('id', 'desc');
+                }
+            }
+        )
             ->columns([
                 Tables\Columns\TextColumn::make('matricula')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nome')
+                    ->limit(25)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->label('E-mail')
+                    ->limit(25)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('telefone')
                     ->searchable(),
@@ -140,13 +154,17 @@ class DiscenteResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
-                ->label('')
-                ->tooltip('Visualizar'),
+                    ->label('')
+                    ->tooltip('Visualizar')
+                    ->hidden(fn ($record): bool => !auth()->user()->can('view', $record)),
+                
                 Tables\Actions\EditAction::make()
-                ->label('')
-                ->tooltip('Editar'),
-                // Ação de exclusão
+                    ->label('')
+                    ->tooltip('Editar')
+                    ->hidden(fn ($record): bool => !auth()->user()->can('update', $record)),
+                    
                 Tables\Actions\DeleteAction::make()
+                    ->hidden(fn ($record): bool => !auth()->user()->can('delete', $record))
                     ->modalHeading('Tem certeza?')
                     ->modalDescription('Essa ação não pode ser desfeita.')
                     ->modalButton('Excluir')
@@ -187,5 +205,29 @@ class DiscenteResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+            if (auth()->user()->hasRole('Discente') && !auth()->user()->hasPermissionTo('Ver Discente')) {
+                $query->where('matricula', auth()->user()->matricula);
+            }
+        
+            return $query;
+    }
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('viewAny', static::getModel());
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('create', static::getModel());
+    }
+    // Adicione este método
+    public static function canView(Model $record): bool
+    {
+        return Gate::allows('view', $record);
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return Gate::allows('update', $record);
     }
 }

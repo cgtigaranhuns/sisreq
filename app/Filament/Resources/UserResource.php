@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
 
 class UserResource extends Resource
 {
@@ -31,15 +32,16 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('matricula')
                     ->required()
+                    ->disabled()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
+               /* Forms\Components\TextInput::make('email')
                     ->label('E-mail')
                     ->email()
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255),*/
               //  Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
                     ->label(label: 'Senha')
@@ -47,16 +49,16 @@ class UserResource extends Resource
                     ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create'),
-                Forms\Components\Toggle::make('status')
-                    ->required()
-                    ->default(true),
+               
                 Forms\Components\Select::make('roles')
                     ->label('Perfil')
                   //  ->multiple()
                     ->preload()
                     ->relationship('roles', 'name', fn(builder $query) => auth()->user()->hasRole('Admin')? null :
                     $query->where('name', '!=', 'Admin')),
-                
+                    Forms\Components\Toggle::make('status')
+                    ->required()
+                    ->default(true),
             ]);
     }
 
@@ -79,17 +81,19 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('nome')
                     ->searchable(),
                
-                Tables\Columns\TextColumn::make('email')
+               /* Tables\Columns\TextColumn::make('email')
                     ->label('E-mail')
-                    ->searchable(),
+                    ->searchable(),*/
                 /*Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),*/
+                
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->label('Perfil')
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('status')
-                    ->boolean(),
-                    Tables\Columns\TextColumn::make('roles.name')
-                ->label('Perfil')
-                ->searchable(),
+                    ->boolean()
+                    ->tooltip(fn (int $state): string => $state === 1 ? 'Ativo' : 'Inativo'),
                /* Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -141,5 +145,15 @@ class UserResource extends Resource
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function canView(Model $record): bool
+    {
+        return Gate::allows('view', $record);
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return Gate::allows('update', $record);
     }
 }

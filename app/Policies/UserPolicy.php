@@ -20,7 +20,8 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('Ver Usuário');
+        return $user->hasPermissionTo('Ver Usuário')&&
+        ($user->hasRole('Discente') ? $user->id === $model->id : true);
     }
 
     /**
@@ -28,7 +29,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('Criar Usuário');
+        return $user->hasPermissionTo('Criar Usuário')&& !$user->hasRole('Discente');
     }
 
     /**
@@ -36,7 +37,8 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('Alterar Usuário');
+        return $user->hasPermissionTo('Alterar Usuário')&&
+        ($user->hasRole('Discente') ? $user->id === $model->id : true);;
     }
 
     /**
@@ -44,7 +46,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('Deletar Usuário');
+        return $user->hasPermissionTo('Deletar Usuário')&& !$user->hasRole('Discente');
     }
 
 }

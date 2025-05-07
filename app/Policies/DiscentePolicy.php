@@ -13,7 +13,8 @@ class DiscentePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('Ver Discente');
+        //return $user->hasPermissionTo('Ver Todos Discentes');
+        return $user->hasPermissionTo('Ver Discente');// && !$user->hasRole('Discente');
     }
 
     /**
@@ -21,7 +22,11 @@ class DiscentePolicy
      */
     public function view(User $user, Discente $discente): bool
     {
-        return $user->hasPermissionTo('Ver Discente');
+        
+        return $user->hasPermissionTo('Ver Discente') &&
+           ($user->hasRole('Discente') ? $discente->matricula === $user->matricula : true);
+        
+       // return $user->hasPermissionTo('Ver Discente');
     }
 
     /**
@@ -29,7 +34,7 @@ class DiscentePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('Criar Discente');
+        return $user->hasPermissionTo('Criar Discente') && !$user->hasRole('Discente');
     }
 
     /**
@@ -37,7 +42,8 @@ class DiscentePolicy
      */
     public function update(User $user, Discente $discente): bool
     {
-        return $user->hasPermissionTo('Alterar Discente');
+       return $user->hasPermissionTo('Alterar Discente') &&
+        ($user->hasRole('Discente') ? $discente->matricula === $user->matricula : true);
     }
 
     /**
@@ -45,7 +51,7 @@ class DiscentePolicy
      */
     public function delete(User $user, Discente $discente): bool
     {
-        return $user->hasPermissionTo('Deletar Discente');
+        return $user->hasPermissionTo('Deletar Discente') && !$user->hasRole('Discente');
     }
 
     
