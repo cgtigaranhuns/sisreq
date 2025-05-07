@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use App\Models\Role; // Adicione esta linha
 
 class CreateUsersFromEnrolledStudents extends Command
 {
@@ -29,7 +30,7 @@ class CreateUsersFromEnrolledStudents extends Command
         $this->newLine();
 
         // Consulta os discentes matriculados
-        $query = Discente::where('situacao', 'Matriculado')
+        $query = Discente::where('situacao', '!=', Null)
                     ->orderBy('nome');
 
         if ($limit > 0) {
@@ -59,33 +60,52 @@ class CreateUsersFromEnrolledStudents extends Command
                 $existingUser = User::where('matricula', $student->matricula)
                     ->orWhere('email', $student->email)
                     ->first();
-
+        
                 if ($existingUser) {
                     $bar->advance();
                     $skipped++;
                     continue;
                 }
-
+        
+                // Determina o status baseado na situação
+                $status = ($student->situacao === 'Matriculado') ? '1' : '0';
+        
                 // Criação do usuário
                 if (!$dryRun) {
-                    $password = Str::random(12); // Gera senha aleatória
-
-                    User::create([
+                    $password = Str::random(12);
+                
+                    $user = User::create([
                         'nome' => $student->nome,
                         'matricula' => $student->matricula,
                         'email' => $student->email ?? ($student->matricula . '@garanhuns.ifpe'),
                         'password' => Hash::make($password),
-                        'status' => '1',
+                        'status' => $status,
                     ]);
-
-                    // Log da criação (em produção, você pode querer enviar por email)
-                    Log::info("Usuário criado para discente", [
-                        'matricula' => $student->matricula,
-                        'email' => $student->email,
-                        'password' => '********' // Nunca logue senhas reais
-                    ]);
+                
+                    try {
+                        // Verifica se o trait HasRoles está no modelo User
+                        if (method_exists($user, 'assignRole')) {
+                            $discenteRole = Role::firstOrCreate([
+                                'name' => 'Discente',
+                                'guard_name' => 'web' // Adicione esta linha
+                            ]);
+                            
+                            $user->assignRole($discenteRole);
+                            
+                            $this->info("Role 'Discente' atribuída ao usuário {$user->matricula}");
+                        } else {
+                            Log::error("Trait HasRoles não está presente no modelo User");
+                            throw new \Exception("Trait HasRoles não está presente no modelo User");
+                        }
+                    } catch (\Exception $e) {
+                        Log::error("Erro ao atribuir role: " . $e->getMessage(), [
+                            'matricula' => $student->matricula,
+                            'error' => $e
+                        ]);
+                        $errors++;
+                    }
                 }
-
+        
                 $created++;
             } catch (\Exception $e) {
                 Log::error("Erro ao criar usuário para discente: " . $e->getMessage(), [
@@ -94,7 +114,7 @@ class CreateUsersFromEnrolledStudents extends Command
                 ]);
                 $errors++;
             }
-
+        
             $bar->advance();
         }
 

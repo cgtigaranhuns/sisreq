@@ -12,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Role extends ModelsRole
 {
-    use HasFactory,  LogsActivity;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'name',

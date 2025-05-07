@@ -18,7 +18,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements LdapAuthenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, AuthenticatesWithLdap, HasRoles, LogsActivity;
-
+    protected $guard_name = 'web';
     /**
      * The attributes that are mass assignable.
      *

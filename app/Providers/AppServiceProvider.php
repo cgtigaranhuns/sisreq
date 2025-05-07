@@ -15,6 +15,8 @@ use App\Observers\ComunicacaoObserver;
 
 
 
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -41,5 +43,6 @@ class AppServiceProvider extends ServiceProvider
         Requerimento::observe(RequerimentoObserver::class);
         Acompanhamento::observe(AcompanhamentoObserver::class);
         Comunicacao::observe(ComunicacaoObserver::class);
+        
     }
 }
