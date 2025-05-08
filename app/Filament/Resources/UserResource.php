@@ -69,10 +69,10 @@ class UserResource extends Resource
         ->modifyQueryUsing(function (Builder $query) {
             $user = auth()->user();
             // Se o usuário for do perfil "usuário", filtra os registros pelo user_id
-            if ($user->hasRole(['Admin','TI'])) {
-                $query;
-            }else {
+            if ($user->hasRole('Discente')) {
                 $query->where('id', $user->id)->where('status', 1);
+            }else {
+                $query;
             }
         })
         ->striped()
@@ -110,6 +110,7 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make()
                 ->label('')
+                //->url(false)
                 ->tooltip('Visualizar'),
                 Tables\Actions\EditAction::make()
                 ->label('')

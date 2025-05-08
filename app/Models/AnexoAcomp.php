@@ -28,7 +28,7 @@ class AnexoAcomp extends Model
     }
     public function acompanhamento()
     {
-        return $this->belongsTo(Acompanhamento::class);
+        return $this->belongsTo(Acompanhamento::class, 'acompanhamento_id');
     }
 
     // Método para obter o caminho completo do arquivo
@@ -42,4 +42,6 @@ class AnexoAcomp extends Model
     {
         return asset('storage/' . str_replace('public/', '', $this->caminho));
     }
+
+   
 }

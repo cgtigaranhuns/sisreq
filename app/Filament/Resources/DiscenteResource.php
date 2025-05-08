@@ -95,12 +95,12 @@ class DiscenteResource extends Resource
         return $table
             ->striped()
             ->modifyQueryUsing(function (Builder $query) {
-                $query->where('deleted_at', null)->orderBy('id', 'desc'); 
+                $query->where('deleted_at', null)->orderBy('nome', 'asc'); 
 
                 $user = auth()->user();
             
             if ($user->hasRole('Discente')) {
-                $query->where('matricula', $user->matricula)->orderBy('id', 'desc');
+                $query->where('matricula', $user->matricula)->orderBy('nome', 'asc');
                 }
             }
         )
