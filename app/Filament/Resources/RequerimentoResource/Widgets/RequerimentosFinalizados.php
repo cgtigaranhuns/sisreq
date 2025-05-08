@@ -12,6 +12,8 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
 use App\Filament\Resources\RequerimentoResource;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
 
 class RequerimentosFinalizados extends BaseWidget
 {
@@ -99,5 +101,15 @@ class RequerimentosFinalizados extends BaseWidget
                 ->tooltip('Excluir')
                 ->requiresConfirmation(), // Se deseja confirmação antes de excluir*/
         ];
+    }/*
+    public static function canView(Model $record): bool
+    {
+        return Gate::allows('view', $record);
     }
+
+    public static function canEdit(Model $record): bool
+    {
+        return Gate::allows('update', $record);
+    }
+   */
 }

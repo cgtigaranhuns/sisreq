@@ -7,6 +7,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Illuminate\Support\Facades\Gate;
 
 class ViewRequerimento extends ViewRecord
 {
@@ -41,4 +42,10 @@ class ViewRequerimento extends ViewRecord
                         ->disabled(),
                 ]);
     }
+    public function mount($record): void
+{
+    parent::mount($record);
+
+    Gate::authorize('view', $this->record);
+}
 }

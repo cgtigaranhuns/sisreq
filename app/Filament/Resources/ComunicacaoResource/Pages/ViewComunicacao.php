@@ -8,10 +8,12 @@ use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Illuminate\Support\Facades\Gate;
 
 class ViewComunicacao extends ViewRecord
 {
     protected static string $resource = ComunicacaoResource::class;
+    protected static bool $shouldRegisterNavigation = false;
 
     protected function getHeaderActions(): array
     {
@@ -95,4 +97,11 @@ class ViewComunicacao extends ViewRecord
                 ]),
             ]);
         }
+
+        public function mount($record): void
+{
+    parent::mount($record);
+
+    Gate::authorize('view', $this->record);
+}
 }

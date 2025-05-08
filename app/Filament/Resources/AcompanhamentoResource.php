@@ -23,6 +23,12 @@ class AcompanhamentoResource extends Resource
     protected static ?string $navigationLabel = 'Acompanhamentos';
     //protected static ?string $slug = 'requerimentos';
     protected static ?string $pluralModelLabel = 'Acompanhamentos';
+    protected static bool $shouldRegisterNavigation;
+
+        public static function shouldRegisterNavigation(): bool
+        {
+            return !auth()->user()->hasRole('Discente');
+        }
 
     public static function form(Form $form): Form
     {

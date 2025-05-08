@@ -17,6 +17,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
 
 class RequerimentoResource extends Resource
 {
@@ -28,6 +30,7 @@ class RequerimentoResource extends Resource
     protected static ?string $navigationLabel = 'Requerimentos';
     protected static ?string $slug = 'requerimentos';
     protected static ?string $pluralModelLabel = 'Requerimentos';
+    
 
     public static function form(Form $form): Form
     {
@@ -264,5 +267,15 @@ class RequerimentoResource extends Resource
         \App\Filament\Resources\RequerimentoResource\Widgets\RequerimentosFinalizados::class,
     ];
 }
+public static function canView(Model $record): bool
+{
+    return Gate::allows('view', $record);
+}
+
+public static function canEdit(Model $record): bool
+{
+    return Gate::allows('update', $record);
+}
+
 
 }

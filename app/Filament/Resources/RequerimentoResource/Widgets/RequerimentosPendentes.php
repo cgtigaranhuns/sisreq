@@ -13,6 +13,8 @@ use App\Filament\Resources\RequerimentoResource;
 use App\Filament\Resources\AcompanhamentoResource;
 use Filament\Tables\Actions\Action;
 use App\Filament\Resources\ComunicacaoResource;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
 
 class RequerimentosPendentes extends BaseWidget
 {
@@ -138,4 +140,15 @@ class RequerimentosPendentes extends BaseWidget
     {
         return fn (Requerimento $record): string => RequerimentoResource::getUrl('view', ['record' => $record]);
     }
+    /*
+    public static function canView(Model $record): bool
+    {
+        return Gate::allows('view', $record);
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return Gate::allows('update', $record);
+    }*/
+   
 }

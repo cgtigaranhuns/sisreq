@@ -21,7 +21,8 @@ class RequerimentoPolicy
      */
     public function view(User $user, Requerimento $requerimento): bool
     {
-        return $user->hasPermissionTo('Ver Requerimentos');
+        return $user->hasPermissionTo('Ver Requerimentos')&&
+        ($user->hasRole('Discente') ? $requerimento->discente->matricula === $user->matricula : true);
     }
 
     /**
@@ -37,7 +38,11 @@ class RequerimentoPolicy
      */
     public function update(User $user, Requerimento $requerimento): bool
     {
-        return $user->hasPermissionTo('Alterar Requerimentos');
+        // Verifica se o status não é 'Em_analise' ou 'finalizado'
+        $statusPermitidos = !in_array($requerimento->status, ['em_analise', 'finalizado']);
+        return $user->hasPermissionTo('Alterar Requerimentos')&&
+        ($user->hasRole('Discente') ? $requerimento->discente->matricula === $user->matricula && $statusPermitidos
+        : $statusPermitidos);
     }
 
     /**
@@ -45,7 +50,11 @@ class RequerimentoPolicy
      */
     public function delete(User $user, Requerimento $requerimento): bool
     {
-        return $user->hasPermissionTo('Deletar Requerimentos');
+        // Verifica se o status não é 'Em_analise' ou 'finalizado'
+        $statusPermitidos = !in_array($requerimento->status, ['em_analise', 'finalizado']);
+        return $user->hasPermissionTo('Deletar Requerimentos')&&
+        ($user->hasRole('Discente') ? $requerimento->discente->matricula === $user->matricula && $statusPermitidos
+        : $statusPermitidos);
     }
 
     

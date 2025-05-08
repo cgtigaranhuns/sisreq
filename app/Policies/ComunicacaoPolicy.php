@@ -21,7 +21,8 @@ class ComunicacaoPolicy
      */
     public function view(User $user, Comunicacao $comunicacao): bool
     {
-        return $user->hasPermissionTo('Ver Comunicação');
+        return $user->hasPermissionTo('Ver Comunicação')&&
+        ($user->hasRole('Discente') ? $comunicacao->requerimento->discente->matricula === $user->matricula : true);
     }
 
     /**

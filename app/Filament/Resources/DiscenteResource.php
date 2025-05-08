@@ -32,9 +32,11 @@ class DiscenteResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('matricula')
                     ->required()
+                    ->disabled()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('nome')
                     ->required()
+                    ->disabled()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->label('E-mail')
@@ -43,32 +45,40 @@ class DiscenteResource extends Resource
                 Forms\Components\TextInput::make('telefone')
                     ->tel()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('data_nascimento'),
+                Forms\Components\DatePicker::make('data_nascimento')
+                ->disabled(),
                 Forms\Components\TextInput::make('cpf')
                     ->mask('999.999.999-99')
+                    ->disabled()
                     ->label('CPF')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('rg')
+                    ->disabled()
                     ->label('RG')
                     ->maxLength(255),
                     Forms\Components\Select::make('campus_id')
+                    ->disabled()
                     ->label('Campus')
                     ->relationship('campus', 'nome'),
                     //->disabled()
                     //->default(1),
                    // ->maxLength(255),
                 Forms\Components\Select::make('curso_id')
+                ->disabled()
                     ->label('Curso')
                     ->relationship('curso', 'nome'),
                     //->maxLength(255),
                     
                 Forms\Components\TextInput::make('situacao')
                     ->label('Situação')
+                    ->disabled()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('periodo')
                     ->label('Período')
+                    ->disabled()
                     ->numeric(),
                 Forms\Components\Select::make('turno')
+                ->disabled()
                    // ->maxLength(255)
                     ->options(
                         [

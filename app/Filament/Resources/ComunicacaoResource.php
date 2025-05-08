@@ -13,6 +13,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
 
 class ComunicacaoResource extends Resource
 {
@@ -23,6 +25,7 @@ class ComunicacaoResource extends Resource
     protected static ?string $navigationLabel = 'Comunicações';
     protected static ?string $slug = 'comunicacoes';
     protected static ?string $pluralModelLabel = 'Comunicações';
+   // protected static bool $shouldRegisterNavigation = true;
 
 
     public static function form(Form $form): Form
@@ -227,6 +230,8 @@ class ComunicacaoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
+                //->modal()
+                //->url(null)
                 ->label('')
                 ->tooltip('Visualizar'),
                 Tables\Actions\EditAction::make()
@@ -279,6 +284,16 @@ class ComunicacaoResource extends Resource
             ]);
             
             
+    }
+
+    public static function canView(Model $record): bool
+    {
+        return Gate::allows('view', $record);
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return Gate::allows('update', $record);
     }
    
 }

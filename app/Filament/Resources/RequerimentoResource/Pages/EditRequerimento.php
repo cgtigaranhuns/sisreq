@@ -7,6 +7,7 @@ use App\Models\Anexo;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 
 class EditRequerimento extends EditRecord
 {
@@ -37,4 +38,10 @@ class EditRequerimento extends EditRecord
           //  Actions\DeleteAction::make(),
         ];
     }
+    public function mount($record): void
+{
+    parent::mount($record);
+
+    Gate::authorize('view', $this->record);
+}
 }

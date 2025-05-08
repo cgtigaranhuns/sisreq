@@ -14,6 +14,8 @@ use Filament\Tables\Actions\DeleteAction;
 use App\Filament\Resources\RequerimentoResource;
 use App\Filament\Resources\AcompanhamentoResource;
 use App\Filament\Resources\ComunicacaoResource;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Model;
 
 
 class RequerimentosEmAnalise extends BaseWidget
@@ -137,5 +139,15 @@ class RequerimentosEmAnalise extends BaseWidget
                 ->tooltip('Excluir')
                 ->requiresConfirmation(), // Se deseja confirmação antes de excluir*/
         ];
+    }/*
+    public static function canView(Model $record): bool
+    {
+        return Gate::allows('view', $record);
     }
+
+    public static function canEdit(Model $record): bool
+    {
+        return Gate::allows('update', $record);
+    }*/
+   
 }

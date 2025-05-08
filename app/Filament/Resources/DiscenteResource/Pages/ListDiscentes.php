@@ -26,7 +26,7 @@ class ListDiscentes extends ListRecords
 
         $user = auth()->user();
 
-        if ($user->hasRole('Discente') && !$user->hasPermissionTo('Ver Todos Discentes')) {
+        if ($user->hasRole('Discente') && !$user->hasPermissionTo('Ver Discente')) {
             $query->where('matricula', $user->matricula);
         }
 
