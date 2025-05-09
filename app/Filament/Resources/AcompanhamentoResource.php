@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AcompanhamentoResource extends Resource
 {
@@ -69,103 +70,8 @@ class AcompanhamentoResource extends Resource
                 
             ]);
         }
-       /* $requerimentoSelect = Forms\Components\Select::make('requerimento_id')
-            ->default($requerimentoId ?? null)
-            ->disabled()
-            ->relationship('requerimento', 'id')
-            ->required()
-            ->live()
-            ->getOptionLabelFromRecordUsing(function ($record) {
-                return "{$record->id} - {$record->discente->nome} - {$record->tipo_requerimento->descricao}";
-            })
-            ->afterStateUpdated(function ($state, Forms\Set $set) {
-                if (!$state) {
-                    return;
-                }
-                
-                $requerimento = Requerimento::with([
-                    'discente',
-                    'tipo_requerimento',
-                    'anexos',
-                //  'observacoes',
-                // 'informacaoComplementar'
-                ])->find($state);
-                
-                if ($requerimento) {
-                    $set('discente', $requerimento->discente->nome);
-                    $set('tipo_requerimento', $requerimento->tipo_requerimento->descricao);
-                    $set('observacoes', $requerimento->observacoes);
-                    
-                //   $set('_anexos', $requerimento->anexos->nome_original);
-                    //dd('_anexos');
-
-                // dd($requerimento->anexos->nome_original);
-
-                $set('_anexos', $requerimento->anexos->map(function ($anexo) {
-                    return [
-                        'nome_original' => $anexo->nome_original,
-                        'caminho' => $anexo->caminho,
-                        'tamanho' => filesize(storage_path('app/public/' . $anexo->caminho))
-                    ];
-                })->toArray());
-
-                
-                    // Armazena a descrição diretamente no campo que será exibido
-                    $set('informacao_complementar_descricao', 
-                    $requerimento->informacaoComplementar->descricao ?? '');
-                }
-            });*/
-    }/*else{
-        $requerimentoSelect = Forms\Components\Select::make('requerimento_id')
-            ->default($requerimentoId ?? null)
-            //->disabled()
-            ->relationship('requerimento', 'id')
-            ->required()
-            ->live()
-            ->getOptionLabelFromRecordUsing(function ($record) {
-                return "{$record->id} - {$record->discente->nome} - {$record->tipo_requerimento->descricao}";
-            })
-            ->afterStateUpdated(function ($state, Forms\Set $set) {
-                if (!$state) {
-                    return;
-                }
-                
-                $requerimento = Requerimento::with([
-                    'discente',
-                    'tipo_requerimento',
-                    'anexos',
-                //  'observacoes',
-                // 'informacaoComplementar'
-                ])->find($state);
-                
-                if ($requerimento) {
-                    $set('discente', $requerimento->discente->nome);
-                    $set('tipo_requerimento', $requerimento->tipo_requerimento->descricao);
-                    $set('observacoes', $requerimento->observacoes);
-                    
-                //   $set('_anexos', $requerimento->anexos->nome_original);
-                    //dd('_anexos');
-
-                // dd($requerimento->anexos->nome_original);
-
-                $set('_anexos', $requerimento->anexos->map(function ($anexo) {
-                    return [
-                        'nome_original' => $anexo->nome_original,
-                        'caminho' => $anexo->caminho,
-                        'tamanho' => filesize(storage_path('app/public/' . $anexo->caminho))
-                    ];
-                })->toArray());
-
-                
-                    // Armazena a descrição diretamente no campo que será exibido
-                    $set('informacao_complementar_descricao', 
-                    $requerimento->informacaoComplementar->descricao ?? '');
-                }
-            });
-    }*/
-
-    
-    
+      
+    }    
         return $form
             ->schema([
                 Forms\Components\Hidden::make('user_id')
@@ -461,5 +367,19 @@ class AcompanhamentoResource extends Resource
     return $query->where('status', '!=', 'finalizado');
     }
 
+    protected function gerarPdfRequerimento(Requerimento $requerimento)
+{
+    $requerimento->load([
+        'discente.campus',
+        'discente.curso',
+        'tipo_requerimento',
+        'informacaoComplementar',
+        'anexos'
+    ]);
+
+    return Pdf::loadView('requerimentos.show', [
+        'requerimento' => $requerimento
+    ]);
+}
     
 }

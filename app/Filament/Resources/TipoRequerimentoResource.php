@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+
 class TipoRequerimentoResource extends Resource
 {
     protected static ?string $model = TipoRequerimento::class;
@@ -68,6 +69,9 @@ class TipoRequerimentoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+            $query->where('deleted_at', null)->orderBy('descricao');
+            }) 
             ->striped()
             ->columns([
                 Tables\Columns\TextColumn::make('descricao')

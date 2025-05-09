@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Requerimento::observe(RequerimentoObserver::class);
-        //Acompanhamento::observe(AcompanhamentoObserver::class);
+        Acompanhamento::observe(AcompanhamentoObserver::class);
         Comunicacao::observe(ComunicacaoObserver::class);
         
     }

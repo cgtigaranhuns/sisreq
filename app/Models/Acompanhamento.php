@@ -44,7 +44,7 @@ class Acompanhamento extends Model
             'id',          // Foreign key on Requerimento table
             'requerimento_id', // Foreign key on Anexo table
             'requerimento_id', // Local key on Acompanhamento table
-            'id'           // Local key on Requerimento table
+            'id'          // Local key on Requerimento table
         );
         //return $this->through('requerimento')->has('anexos');
     }

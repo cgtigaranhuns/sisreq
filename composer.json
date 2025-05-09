@@ -9,15 +9,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "barryvdh/laravel-dompdf": "^3.1",
         "directorytree/ldaprecord-laravel": "^3.4",
         "filament/filament": "^3.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "leandrocfe/filament-ptbr-form-fields": "3.0",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-permission": "^6.16",
-        "leandrocfe/filament-ptbr-form-fields": "3.0",
         "z3d0x/filament-logger": "^0.8.0"
     },
     "require-dev": {

@@ -63,7 +63,7 @@ class RequerimentoResource extends Resource
                     ->relationship(
                         'tipo_requerimento', 
                         'descricao',
-                        fn (Builder $query) => $query->where('status', 1)  // Filtra apenas os ativos
+                        fn (Builder $query) => $query->where('status', 1)->ordeBy('descricao')  // Filtra apenas os ativos
                     )
                     //->relationship('tipo_requerimento', 'descricao')
                     ->required()
@@ -156,79 +156,18 @@ class RequerimentoResource extends Resource
     {
         return $table
         ->paginated(false)
-      /*  ->modifyQueryUsing(function (Builder $query) {
-            $user = auth()->user();
-            // Se o usuário for do perfil "usuário", filtra os registros pelo user_id
-            if ($user->hasRole('Discente')) {
-                $query->where('user_id', $user->id)->orderBY('id', 'desc'); 
-            }else {
-               $query->orderBY('id', 'desc');
-            }
-        })
-            ->striped()*/
+      
             ->columns([
-               /*Tables\Columns\TextColumn::make('id')
-                    ->label('#')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('discente.nome')
-                    //->numeric()
-                    ->limit(35)
-                    ->sortable(),
-                    Tables\Columns\TextColumn::make('discente.matricula')
-                    ->label('Matricula')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('tipo_requerimento.descricao')
-                    ->Label('Tipo do Requerimento')
-                    ->limit(35)
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('anexos_count')
-                    ->label('Anexos')
-                    ->aligncenter()
-                    ->counts('anexos'),
-                /*Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-               /* Tables\Columns\TextColumn::make('created_at')
-                    ->label('Criado em')
-                    ->dateTime(format: 'd/m/Y')
-                    ->sortable(),*/
-                  //  ->toggleable(isToggledHiddenByDefault: true),
-                /*Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),*/
-               /* Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'pendente' => 'danger',
-                        'em_analise' => 'warning',
-                        'finalizado' => 'success',
-                    })
-                    ->searchable(),*/
+              
             ])
             ->filters([
-              ///  Tables\Filters\TrashedFilter::make(),
+              
             ])
             ->actions([
-             /*   Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
-                ->modalHeading('Tem certeza?')
-                ->modalDescription('Essa ação não pode ser desfeita.')
-                ->modalButton('Excluir')
-                ->modalWidth('md') // ✅ Correção: Usando o enum corretamente
-                //->label('')
-                ->tooltip('Excluir'),*/
+             
             ])
             ->bulkActions([
-             /*   Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),*/
+            
             ]);
     }
 
