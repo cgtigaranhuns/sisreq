@@ -61,9 +61,11 @@ class RequerimentoResource extends Resource
                 Forms\Components\Select::make('tipo_requerimento_id')
                     ->label('Tipo do Requerimento')
                     ->relationship(
-                        'tipo_requerimento', 
-                        'descricao',
-                        fn (Builder $query) => $query->where('status', 1)->ordeBy('descricao')  // Filtra apenas os ativos
+                        name: 'tipo_requerimento',
+                        titleAttribute: 'descricao',
+                        modifyQueryUsing: fn (Builder $query) => $query
+                            ->where('status', true)
+                            ->orderBy('descricao')
                     )
                     //->relationship('tipo_requerimento', 'descricao')
                     ->required()

@@ -99,14 +99,17 @@ class RequerimentosPendentes extends BaseWidget
                 ]);
         
                 // Busca todos os tipos de requerimento
-                $tipos = TipoRequerimento::where('status', 1)->where('deleted_at','=', null)->orderBy('descricao')->get();
+                $tipos = TipoRequerimento::where('status', 1)->where('deleted_at','=', null)->orderBy('descricao')->get()->keyBy('id');
+                // Obtém os IDs dos tipos selecionados
+                //$tiposSelecionados = $record->tipo_requerimento->pluck('id')->toArray();
         
                 // Gera o PDF com os dados
                 $pdf = Pdf::loadView('requerimentos.show', [
                     'requerimento' => $record,
                     'tipos' => $tipos,
+                   // 'tiposSelecionados' => $record->tipo_requerimento->pluck('id')->toArray()
                 ]);
-        
+               // dd($record->tipo_requerimento->pluck('id')->toArray());
                 // Define o nome do arquivo
                 $filename = "requerimento-{$record->id}.pdf";
         
