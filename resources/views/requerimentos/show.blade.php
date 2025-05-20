@@ -1374,7 +1374,15 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
                     <td class="s21"></td>
                     <td class="s21" colspan="31"><br><br></td>
                 </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
 
+<body>
+    <div class="ritz grid-container" dir="ltr">
+        <table class="waffle" cellspacing="0" cellpadding="0">
+            <tbody>
                 <tr style="height: 30px">
                     <th id="0R70" style="height: 20px;" class="row-headers-background">
                         <div class="row-header-wrapper" style="line-height: 20px"></div>
