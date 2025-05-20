@@ -17,6 +17,9 @@ use App\Filament\Resources\ComunicacaoResource;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\TipoRequerimento;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Response;
 
 class RequerimentosEmAnalise extends BaseWidget
 {
@@ -84,6 +87,47 @@ class RequerimentosEmAnalise extends BaseWidget
     protected function getTableActions(): array
     {
         return [
+            Action::make('pdf')
+            ->label('')
+            ->hidden(auth()->user()->hasRole('Discente') ?? false)
+            ->tooltip('Gerar PDF')
+            ->icon('heroicon-s-document-arrow-down')
+            ->color('success')
+            ->action(function (Requerimento $record) {
+                // Carrega os relacionamentos necessários
+                $record->load([
+                    'discente.campus',
+                    'discente.curso',
+                    'tipo_requerimento',
+                    'informacaoComplementar',
+                    'anexos'
+                ]);
+        
+                // Busca todos os tipos de requerimento
+                $tipos = TipoRequerimento::where('status', 1)->where('deleted_at','=', null)->orderBy('descricao')->get()->keyBy('id');
+                // Obtém os IDs dos tipos selecionados
+                //$tiposSelecionados = $record->tipo_requerimento->pluck('id')->toArray();
+        
+                // Gera o PDF com os dados
+                $pdf = Pdf::loadView('requerimentos.show', [
+                    'requerimento' => $record,
+                    'tipos' => $tipos,
+                   // 'tiposSelecionados' => $record->tipo_requerimento->pluck('id')->toArray()
+                ]);
+               // dd($record->tipo_requerimento->pluck('id')->toArray());
+                // Define o nome do arquivo
+                $filename = "requerimento-{$record->id}.pdf";
+        
+                // Retorna a resposta de download
+                return Response::streamDownload(
+                    fn () => print($pdf->output()),
+                    $filename,
+                    [
+                        'Content-Type' => 'application/pdf',
+                        'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+                    ]
+                );
+            }),
             Action::make('comunicacao')
             ->label('')
             ->hidden(auth()->user()->hasRole('Discente') ?? false)
