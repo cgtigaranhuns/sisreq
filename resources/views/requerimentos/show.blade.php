@@ -32,7 +32,7 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
         text-align: left;
         color: #000000;
         font-family: "Times New Roman";
-        font-size: 8pt;
+        font-size: 7pt;
         vertical-align: bottom;
         white-space: nowrap;
         direction: ltr;
@@ -296,13 +296,15 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
         border-right: 1px SOLID #000000;
         background-color: #ffffff;
         text-align: left;
-        font-weight: bold;
+        font-weight: normal;
         color: #000000;
         font-family: Arial;
-        font-size: 14pt;
+        font-size: 10pt;
         vertical-align: top;
-        white-space: nowrap;
+        white-space: normal;
         direction: ltr;
+        word-break: break-all;
+        max-width: 200px;
         padding: 2px 3px 2px 3px;
     }
 
@@ -357,7 +359,7 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
         text-align: left;
         color: #000000;
         font-family: "Times New Roman";
-        font-size: 8pt;
+        font-size: 7pt;
         vertical-align: bottom;
         white-space: nowrap;
         direction: ltr;
@@ -590,7 +592,7 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
         text-align: left;
         color: #000000;
         font-family: "Times New Roman";
-        font-size: 8pt;
+        font-size: 7pt;
         vertical-align: top;
         white-space: nowrap;
         direction: ltr;
@@ -1006,7 +1008,8 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
                         Diploma 1ª ou 2ª via
                         @endif</td>
                     <td class="s17" colspan="2">a/j</td>
-                    <td class="s19" dir="ltr" colspan="10" rowspan="15"></td>
+                    <td class="s19" dir="ltr" colspan="10" rowspan="15">
+                        {{ $requerimento->observacoes ?? '' }}</td>
                 </tr>
                 <tr style="height: 12px">
                     <th id="0R24" style="height: 12px;" class="row-headers-background">
@@ -1165,14 +1168,16 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
                     <td class="s8"></td>
                     <td id="check" class="s9" style="text-align: center;  font-size: 7pt; padding: 1px 2px 1px 2px;">
                         {{ in_array($requerimento->tipo_requerimento->id, [32, 33, 34, 35, 36]) ? 'X' : '' }}</td>
-                    <td class="s10" dir="ltr" colspan="30">@if($requerimento->tipo_requerimento->id === 32 ||
+                    <td class="s10" dir="ltr" colspan="30"
+                        style="word-break: break-all; white-space: normal; max-width: 700px;">
+                        @if($requerimento->tipo_requerimento->id === 32 ||
                         $requerimento->tipo_requerimento->id === 33 || $requerimento->tipo_requerimento->id === 34 ||
                         $requerimento->tipo_requerimento->id === 35 || $requerimento->tipo_requerimento->id === 36)
-                        {{ $tiposRequerimentos[$requerimento->tipo_requerimento->id]->descricao }}
+                        {{ $tiposRequerimentos[$requerimento->tipo_requerimento->id]->descricao }} |
                         @if($requerimento->tipo_requerimento->id === 32 || $requerimento->tipo_requerimento->id === 33
                         || $requerimento->tipo_requerimento->id === 34 || $requerimento->tipo_requerimento->id === 35 ||
                         $requerimento->tipo_requerimento->id === 36)
-                        - {{$requerimento->informacaoComplementar->descricao ?? ''}}
+                        | {{$requerimento->informacaoComplementar->descricao ?? ''}}
                         @else
 
                         @endif
@@ -1187,14 +1192,16 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
                     <td class="s8"></td>
                     <td id="check" class="s9" style="text-align: center;  font-size: 7pt; padding: 1px 2px 1px 2px;">
                         {{ in_array($requerimento->tipo_requerimento->id, [37, 38, 39, 40, 41]) ? 'X' : '' }}</td>
-                    <td class="s10" dir="ltr" colspan="30">@if($requerimento->tipo_requerimento->id === 37 ||
+                    <td class="s10" dir="ltr" colspan="30"
+                        style="word-break: break-all; white-space: normal; max-width: 700px;">
+                        @if($requerimento->tipo_requerimento->id === 37 ||
                         $requerimento->tipo_requerimento->id === 38 || $requerimento->tipo_requerimento->id === 39 ||
                         $requerimento->tipo_requerimento->id === 40 || $requerimento->tipo_requerimento->id === 41)
                         {{ $tiposRequerimentos[$requerimento->tipo_requerimento->id]->descricao }}
                         @if($requerimento->tipo_requerimento->id === 37 || $requerimento->tipo_requerimento->id === 38
                         || $requerimento->tipo_requerimento->id === 39 || $requerimento->tipo_requerimento->id === 40 ||
                         $requerimento->tipo_requerimento->id === 41)
-                        - {{$requerimento->informacaoComplementar->descricao ?? ''}}
+                        | {{$requerimento->informacaoComplementar->descricao ?? ''}}
                         @else
 
                         @endif
@@ -1209,19 +1216,21 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
                     <td class="s8"></td>
                     <td id="check" class="s9" style="text-align: center;  font-size: 7pt; padding: 1px 2px 1px 2px;">
                         {{ in_array($requerimento->tipo_requerimento->id, [42, 43, 44, 45, 46]) ? 'X' : '' }}</td>
-                    <td class="s10" dir="ltr" colspan="30">@if($requerimento->tipo_requerimento->id === 42 ||
+                    <td class="s10" dir="ltr" colspan="30"
+                        style="word-break: break-all; white-space: normal; max-width: 700px;">
+                        @if($requerimento->tipo_requerimento->id === 42 ||
                         $requerimento->tipo_requerimento->id === 43 || $requerimento->tipo_requerimento->id === 44 ||
                         $requerimento->tipo_requerimento->id === 45 || $requerimento->tipo_requerimento->id === 46)
                         {{ $tiposRequerimentos[$requerimento->tipo_requerimento->id]->descricao }}
                         @if($requerimento->tipo_requerimento->id === 42 || $requerimento->tipo_requerimento->id === 43
                         || $requerimento->tipo_requerimento->id === 44 || $requerimento->tipo_requerimento->id === 45 ||
                         $requerimento->tipo_requerimento->id === 46)
-                        - {{$requerimento->informacaoComplementar->descricao ?? ''}}
+                        | {{$requerimento->informacaoComplementar->descricao ?? ''}}
                         @else
 
                         @endif
                         @else
-                        REVISÃO DE NOTA: 1ª Unidade | 2ª Unidade | 3ª Unidade | 4ª Unidade | Exames Finais @endif
+                        REVISÃO DE FALTAS: 1ª Unidade | 2ª Unidade | 3ª Unidade | 4ª Unidade | Exames Finais @endif
                     </td>
                 </tr>
                 <tr style="height: 12px">
@@ -1262,7 +1271,8 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
                         <div class="row-header-wrapper" style="line-height: 12px"></div>
                     </th>
                     <td class="s5" dir="ltr"></td>
-                    <td class="s5" dir="ltr" colspan="19" rowspan="3">Data:</td>
+                    <td class="s5" dir="ltr" colspan="19" rowspan="3">Data:
+                        {{ $requerimento->created_at->format('d/m/Y') }}</td>
                     <td class="s6" dir="ltr" colspan="8" rowspan="2">PROTOCOLO Nº</td>
                     <td class="s6" dir="ltr" colspan="4" rowspan="2">CGCA / CRE / SRE</td>
                 </tr>
@@ -1362,10 +1372,10 @@ $tiposRequerimentos = App\Models\TipoRequerimento::all()->keyBy('id');
                         <div class="row-header-wrapper" style="line-height: 20px"></div>
                     </th>
                     <td class="s21"></td>
-                    <td class="s21" colspan="31"></td>
+                    <td class="s21" colspan="31"><br><br></td>
                 </tr>
 
-                <tr style="height: 20px">
+                <tr style="height: 30px">
                     <th id="0R70" style="height: 20px;" class="row-headers-background">
                         <div class="row-header-wrapper" style="line-height: 20px"></div>
                     </th>
