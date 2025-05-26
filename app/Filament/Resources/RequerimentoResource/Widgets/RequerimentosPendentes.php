@@ -86,7 +86,7 @@ class RequerimentosPendentes extends BaseWidget
             ->label('')
             ->hidden(auth()->user()->hasRole('Discente') ?? false)
             ->tooltip('Gerar PDF')
-            ->icon('heroicon-s-document-arrow-down')
+            ->icon('heroicon-s-printer')
             ->color('success')
             ->action(function (Requerimento $record) {
                 // Carrega os relacionamentos necessários
