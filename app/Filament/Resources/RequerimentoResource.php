@@ -40,7 +40,7 @@ class RequerimentoResource extends Resource
                     ->default(auth()->id()) // Preenche automaticamente com o ID do usuário logado
                     ->required(),
                 Forms\Components\Select::make('discente_id')
-                    
+                    ->label('Discente')
                         //->relationship('discente', 'nome')
                         ->options(function () {
                         $query = \App\Models\Discente::query()->orderBy('nome');
