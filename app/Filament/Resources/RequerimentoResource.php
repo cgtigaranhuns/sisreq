@@ -42,15 +42,21 @@ class RequerimentoResource extends Resource
                 Forms\Components\Select::make('discente_id')
                     
                         //->relationship('discente', 'nome')
-                        ->relationship(
-                            name: 'discente',
-                            titleAttribute: 'nome',
-                            modifyQueryUsing: fn (Builder $query) => auth()->user()->hasRole('Discente') 
-                                ? $query->where('matricula', auth()->user()->matricula) // Filtra por matrícula do usuário
-                                : $query
-                        )
+                        ->options(function () {
+                        $query = \App\Models\Discente::query()->orderBy('nome');
+                        
+                        if (auth()->user()->hasRole('Discente')) {
+                            $query->where('matricula', auth()->user()->matricula);
+                        }
+
+                        return $query->get()->mapWithKeys(function ($discente) {
+                            return [
+                                $discente->id => "{$discente->nome} - {$discente->matricula}"
+                            ];
+                        });
+                    })
                     ->required()
-                    ->searchable()
+                    ->searchable(['nome', 'matricula'])
                     ->preload()
                     //->readonly(fn () => auth()->user()->hasRole('Discente')) // Desabilita se for Discente
                     ->default(
