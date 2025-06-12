@@ -70,7 +70,7 @@ class AcompanhamentoNotificacao extends Mailable
     private function getAssunto()
     {
         return $this->destinatario === 'admin'
-            ? "[Admin] {$this->dados['assuntoBase']} - Protocolo #{$this->dados['requerimento']->id}"
-            : "{$this->dados['assuntoBase']} - Seu requerimento";
+            ? "[Admin] {$this->dados['assuntoBase']} - ID #{$this->dados['requerimento']->id}"
+            : "{$this->dados['assuntoBase']} - ID #{$this->dados['requerimento']->id}";
     }
 }

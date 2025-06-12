@@ -9,6 +9,7 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewTipoRequerimento extends ViewRecord
 {
     protected static string $resource = TipoRequerimentoResource::class;
+     protected static ?string $title = 'Visualizar Tipo de requerimento';
 
     protected function getHeaderActions(): array
     {

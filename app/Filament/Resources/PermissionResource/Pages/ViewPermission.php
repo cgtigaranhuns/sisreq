@@ -9,6 +9,7 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewPermission extends ViewRecord
 {
     protected static string $resource = PermissionResource::class;
+     protected static ?string $title = 'Visualizar Permissão';
 
     protected function getHeaderActions(): array
     {

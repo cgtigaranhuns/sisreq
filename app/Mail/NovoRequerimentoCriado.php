@@ -26,7 +26,7 @@ class NovoRequerimentoCriado extends Mailable
     public function build()
     {
         $assunto = $this->destinatario === 'admin' 
-            ? 'Novo Requerimento  - #'.$this->requerimento->id 
+            ? '[#'.$this->requerimento->id .'] - Novo Requerimento - '.$this->requerimento->tipo_requerimento->descricao
             : 'Seu Requerimento Foi Registrado - #'.$this->requerimento->id;
 
         return $this->subject($assunto)

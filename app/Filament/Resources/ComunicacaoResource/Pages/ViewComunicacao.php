@@ -14,6 +14,7 @@ class ViewComunicacao extends ViewRecord
 {
     protected static string $resource = ComunicacaoResource::class;
     protected static bool $shouldRegisterNavigation = false;
+     protected static ?string $title = 'Visualizar Comunicação';
 
     protected function getHeaderActions(): array
     {

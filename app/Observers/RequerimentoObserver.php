@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Requerimento;
 use App\Models\User;
 use App\Models\Discente;
+use App\Jobs\SendRequerimentoEmails;
 use App\Mail\NovoRequerimentoCriado;
 use Illuminate\Support\Facades\Mail;
 
@@ -15,7 +16,7 @@ class RequerimentoObserver
      */
     public function created(Requerimento $requerimento): void
     {
-        try {
+       /* try {
             $discente = $requerimento->discente; // Assume que o relacionamento existe
             $adminEmail = env('MAIL_ADMIN');
     
@@ -42,8 +43,15 @@ class RequerimentoObserver
         } catch (\Exception $e) {
             \Log::error("Erro ao enviar e-mails para o requerimento ID: {$requerimento->id}. Erro: " . $e->getMessage());
         }
-    }
+    }*/
 
+      try {
+        // Despacha o Job com delay de 30 segundos
+        SendRequerimentoEmails::dispatch($requerimento)->delay(now()->addSeconds(5));
+    } catch (\Exception $e) {
+        \Log::error("Erro ao despachar job de e-mail para o requerimento ID: {$requerimento->id}. Erro: " . $e->getMessage());
+    }
+    }
     /**
      * Handle the Requerimento "updated" event.
      */

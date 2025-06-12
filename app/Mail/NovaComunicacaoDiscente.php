@@ -23,7 +23,7 @@ class NovaComunicacaoDiscente extends Mailable
 
     public function build()
     {
-        return $this->subject('Nova Mensagem sobre Seu Requerimento - #'. $this->comunicacao->requerimento->id)
+        return $this->subject('Nova mensagem sobre seu requerimento - #'. $this->comunicacao->requerimento->id)
                     ->view('emails.nova_comunicacao');
     }
 }
