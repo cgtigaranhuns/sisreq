@@ -43,6 +43,6 @@ class AuthServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Sobrescrevendo o LoginResponse do Filament
-        $this->app->bind(LoginResponseContract::class, LoginResponse::class);
+      //  $this->app->bind(LoginResponseContract::class, LoginResponse::class);
     }
 }
