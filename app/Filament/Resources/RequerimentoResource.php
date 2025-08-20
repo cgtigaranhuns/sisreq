@@ -109,7 +109,7 @@ class RequerimentoResource extends Resource
                     ->label('Processo SEI')
                     //->maxLength(255)
                     ->default(false)
-                    ->visible(fn () => !in_array(auth()->user()->role, ['discente', 'outra_role']))
+                    ->visible(fn () => (!auth()->user()->hasRole('Discente')))
                     ->reactive(),
 
                 Forms\Components\TextInput::make('num_processo')
