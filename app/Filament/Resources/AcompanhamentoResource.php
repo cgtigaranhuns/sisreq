@@ -59,6 +59,7 @@ class AcompanhamentoResource extends Resource
                 'tipo_requerimento' => $requerimento->tipo_requerimento->descricao,
                 'observacoes' => $requerimento->observacoes,
                 'informacao_complementar_descricao' => $requerimento->informacaoComplementar->descricao ?? '',
+                'processo' => $requerimento->processo_sei, // ← ADICIONE ESTA LINHA
                 '_anexos' => $requerimento->anexos->map(function ($anexo) {
                     return [
                         'nome_original' => $anexo->nome_original,
@@ -107,6 +108,7 @@ class AcompanhamentoResource extends Resource
                             $set('discente', $requerimento->discente->nome);
                             $set('tipo_requerimento', $requerimento->tipo_requerimento->descricao);
                             $set('observacoes', $requerimento->observacoes);
+                            $set('processo', $requerimento->processo_sei); // ← ADICIONE ESTA LINHA
                             
                          //   $set('_anexos', $requerimento->anexos->nome_original);
                             //dd('_anexos');
@@ -205,10 +207,11 @@ class AcompanhamentoResource extends Resource
                         'application/msword',
                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     ])
-                    ->maxSize(5120) // 5MB
+                    ->maxSize(10240) // 5MB
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('processo')
                     ->label('Registro de processo no SEI?')
+                    ->default($defaultValues['processo'] ?? false) // ← USE O VALOR PADRÃO
                     ->onColor('success')
                     ->offColor('gray'),
 

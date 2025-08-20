@@ -18,6 +18,8 @@ class Requerimento extends Model
         'discente_id',
         'tipo_requerimento_id',
         'observacoes',
+        'num_processo',
+        'processo_sei',
         'status',
     ];
 

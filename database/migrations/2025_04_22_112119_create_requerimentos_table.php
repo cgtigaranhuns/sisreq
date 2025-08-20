@@ -17,6 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('discente_id');
             $table->unsignedBigInteger('tipo_requerimento_id');
+            $table->string('num_processo')->nullable();
+            $table->boolean('processo_sei')->default(false);
             $table->string('status')->default('pendente');
             $table->softDeletes();
             $table->timestamps();

@@ -15,6 +15,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+//use Closure;
+use Filament\Forms\Get;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Gate;
@@ -102,10 +104,20 @@ class RequerimentoResource extends Resource
                     ->maxLength(255),
 
                 
-               /* Forms\Components\TextInput::make('status')
+               Forms\Components\Toggle::make('processo_sei')
                     ->required()
+                    ->label('Processo SEI')
+                    //->maxLength(255)
+                    ->default(false)
+                    ->visible(fn () => !in_array(auth()->user()->role, ['discente', 'outra_role']))
+                    ->reactive(),
+
+                Forms\Components\TextInput::make('num_processo')
+                    ->required()
+                    
                     ->maxLength(255)
-                    ->default('pendente'),*/
+                    ->visible(fn (Get $get) => $get('processo_sei') === true)
+                    ->label('Número do Processo no SEI'),
 
                     // informações complementares
 
@@ -146,7 +158,7 @@ class RequerimentoResource extends Resource
                         'application/msword',
                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     ])
-                    ->maxSize(5120) // 5MB
+                    ->maxSize(10240) // 5MB
                     ->columnSpanFull()
                     ->hidden(function (Forms\Get $get) {
                         $tipoId = $get('tipo_requerimento_id');
