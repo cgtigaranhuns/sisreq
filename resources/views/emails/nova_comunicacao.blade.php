@@ -161,9 +161,10 @@
 
     <div class="footer">
         <p><em><span style="color:rgb(190, 48, 13);">Esta é uma mensagem automática do sistema de requerimentos do IFPE
+                    -
                     Campus Garanhuns.</span></em></p>
-        <p>Por favor, não responda este e-mail. Em caso de dúvidas, entre em contato com a secretaria acadêmica.</p>
-        <p>IFPE Campus Garanhuns | R. Francisco Braga - Indiano, Garanhuns - PE, CEP: 55.298-320</p>
+        <p>Por favor, não responda este e-mail. Em caso de dúvidas, entre em contato com o Setor de Atendimento.</p>
+        <p>IFPE - Campus Garanhuns | R. Francisco Braga - Indiano, Garanhuns - PE, CEP: 55.298-320</p>
     </div>
 </body>
 

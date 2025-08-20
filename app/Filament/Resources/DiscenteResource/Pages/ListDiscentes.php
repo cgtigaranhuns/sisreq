@@ -16,7 +16,7 @@ class ListDiscentes extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-            ->label('Novo Dicente'),
+            ->label('Novo Discente'),
         ];
     }
 

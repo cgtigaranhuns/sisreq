@@ -61,6 +61,20 @@
         display: inline-block;
         border-radius: 3px;
     }
+
+    .btn-link {
+        background-color: #006633;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .btn-link:hover {
+        background-color: #004d26;
+    }
     </style>
 </head>
 
@@ -92,6 +106,14 @@
                 {{ $requerimento->status ?? 'N/A' }}
                 @endif</span></p>
         <p><strong>Data:</strong> {{ $requerimento->created_at->format('d/m/Y H:i') }}</p>
+
+        {{-- Link para o requerimento (Admin) --}}
+        <p>
+            <a href="{{ url('/requerimentos/' . $requerimento->id) }}" class="btn-link" target="_blank">
+                Acessar Requerimento
+            </a>
+        </p>
+
         @else
         {{-- Conteúdo para o DISCENTE --}}
         <h2>Olá, {{ $discente->nome }}!</h2>
@@ -117,15 +139,30 @@
             </li>
         </ul>
 
-        <p>Você pode acompanhar as atualizações deste requerimento através do sistema acadêmico.</p>
+        {{-- Link para o requerimento (Discente) --}}
+        <p>Você pode acompanhar as atualizações deste requerimento através do sistema:</p>
+        <a href="{{ url('/meus-requerimentos/' . $requerimento->id) }}" class="btn-link" target="_blank">
+            Acessar Meu Requerimento
+        </a>
+
+        {{-- Link para anexo (se existir) --}}
+        @if(isset($anexo) && $anexo->caminho)
+        <p style="margin-top: 15px;">
+            <a href="{{ asset('storage/' . $anexo->caminho) }}" class="anexo-link" target="_blank">
+                📎 Visualizar Anexo
+            </a>
+        </p>
+        @endif
+
         @endif
     </div>
 
     <div class="footer">
         <p><em><span style="color:rgb(190, 48, 13);">Esta é uma mensagem automática do sistema de requerimentos do IFPE
+                    -
                     Campus Garanhuns.</span></em></p>
-        <p>Por favor, não responda este e-mail. Em caso de dúvidas, entre em contato com a secretaria acadêmica.</p>
-        <p>IFPE Campus Garanhuns | R. Francisco Braga - Indiano, Garanhuns - PE, CEP: 55.298-320</p>
+        <p>Por favor, não responda este e-mail. Em caso de dúvidas, entre em contato com o Setor de Atendimento.</p>
+        <p>IFPE - Campus Garanhuns | R. Francisco Braga - Indiano, Garanhuns - PE, CEP: 55.298-320</p>
     </div>
 </body>
 
