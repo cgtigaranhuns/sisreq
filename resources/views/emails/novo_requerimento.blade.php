@@ -63,7 +63,7 @@
     }
 
     .btn-link {
-        background-color: #006633;
+        background-color: #d0d4d2ff;
         color: white;
         padding: 10px 20px;
         text-decoration: none;
@@ -141,7 +141,7 @@
 
         {{-- Link para o requerimento (Discente) --}}
         <p>Você pode acompanhar as atualizações deste requerimento através do sistema:</p>
-        <a href="{{ url('/meus-requerimentos/' . $requerimento->id) }}" class="btn-link" target="_blank">
+        <a href="{{ url('/requerimentos/' . $requerimento->id) }}" class="btn-link" target="_blank">
             Acessar Meu Requerimento
         </a>
 
