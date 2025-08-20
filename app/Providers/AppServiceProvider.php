@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Responses\LoginResponse;
+use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use Illuminate\Support\ServiceProvider;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationGroup;
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        // $this->app->bind(LoginResponseContract::class, LoginResponse::class);
     }
 
     /**
@@ -44,5 +47,6 @@ class AppServiceProvider extends ServiceProvider
         Acompanhamento::observe(AcompanhamentoObserver::class);
         Comunicacao::observe(ComunicacaoObserver::class);
         
+       
     }
 }

@@ -6,6 +6,9 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 
+use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
+use App\Http\Responses\LoginResponse;
+
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -35,5 +38,11 @@ class AuthServiceProvider extends ServiceProvider
         Auth::provider('multi-ldap', function ($app, array $config) {
             return new MultiLdapUserProvider();
         });
+    }
+
+    public function register(): void
+    {
+        // Sobrescrevendo o LoginResponse do Filament
+       // $this->app->bind(LoginResponseContract::class, LoginResponse::class);
     }
 }
