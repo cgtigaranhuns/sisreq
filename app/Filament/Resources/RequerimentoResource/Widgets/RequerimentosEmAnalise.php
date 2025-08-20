@@ -154,7 +154,7 @@ class RequerimentosEmAnalise extends BaseWidget
             ->color('warning')
             ->requiresConfirmation() 
             ->modalHeading('Confirmar Acompanhamento')
-            ->modalDescription('Deseja realmente iniciar o Acompanhamento deste Requerimento?')
+            ->modalDescription('Deseja iniciar o Acompanhamento deste Requerimento?')
             ->modalSubmitActionLabel('Confirmar')
             ->modalCancelActionLabel('Cancelar')
             ->action(function (Requerimento $record) {
