@@ -45,11 +45,17 @@ class UserResource extends Resource
                     ->maxLength(255),*/
               //  Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
-                    ->label(label: 'Senha')
+                    ->label('Senha')
                     ->password()
                     ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create'),
+                Forms\Components\TextInput::make('password_confirmation')
+                    ->label('Confirmar Senha')
+                    ->password()
+                    ->required(fn (string $context): bool => $context === 'create')
+                    ->maxLength(255)
+                    ->dehydrated(false),
                
                 Forms\Components\Select::make('roles')
                     ->label('Perfil')

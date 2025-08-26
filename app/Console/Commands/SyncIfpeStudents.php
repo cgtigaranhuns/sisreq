@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Discente;
+use App\Models\Curso;
+use App\Models\Campus; // Adicione esta importação
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -17,8 +19,15 @@ class SyncIfpeStudents extends Command
 
     protected $description = 'Sincroniza discentes com a API do IFPE (Spring Data format)';
 
-    protected $apiBaseUrl = 'https://api.ifpe.edu.br/qacademico/';
-    protected $apiToken = 'faBj4kkwVoJLsAnZOfAbwFvflyL5omG5';
+    protected $apiBaseUrl;
+    protected $apiToken;
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->apiBaseUrl = env('IFPE_API_URL');
+        $this->apiToken = env('IFPE_API_TOKEN');
+    }
 
     public function handle()
     {
@@ -116,6 +125,7 @@ class SyncIfpeStudents extends Command
                         'student_data' => $student ?? null,
                         'error' => $e
                     ]);
+                    $this->error("Erro: ".$e->getMessage());
                     $totalErrors++;
                 }
 
@@ -154,6 +164,26 @@ class SyncIfpeStudents extends Command
             throw new \Exception("Matrícula não informada");
         }
 
+        // Busca ou cria o curso baseado no nome do curso da API
+        $cursoId = null;
+        if (isset($studentData['courseName']) && !empty($studentData['courseName'])) {
+            $curso = Curso::firstOrCreate(
+                ['nome' => $studentData['courseName']],
+                ['nome' => $studentData['courseName']]
+            );
+            $cursoId = $curso->id;
+        }
+
+        // Busca ou cria o campus baseado no nome do campus da API
+        $campusId = null;
+        if (isset($studentData['campusName']) && !empty($studentData['campusName'])) {
+            $campus = Campus::firstOrCreate(
+                ['nome' => $studentData['campusName']],
+                ['nome' => $studentData['campusName']]
+            );
+            $campusId = $campus->id;
+        }
+
         // Mapeamento seguro dos campos
         $data = [
             'nome' => $studentData['fullName'] ?? null,
@@ -162,8 +192,8 @@ class SyncIfpeStudents extends Command
             'data_nascimento' => isset($studentData['birthday']) ? $this->parseDate($studentData['birthday']) : null,
             'cpf' => $studentData['brCPF'] ?? null,
             'rg' => $studentData['brRG'] ?? null,
-            'campus' => $studentData['campusName'] ?? null,
-            'curso' => $studentData['courseName'] ?? null,
+            'campus_id' => $campusId, // Agora usamos campus_id em vez de campus
+            'curso_id' => $cursoId, // Agora usamos curso_id em vez de curso
             'situacao' => $studentData['enrollmentStatus'] ?? null,
             'periodo' => $studentData['currentPeriod'] ?? null,
             'turno' => $studentData['shift'] ?? null,
