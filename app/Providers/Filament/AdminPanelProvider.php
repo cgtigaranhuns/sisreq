@@ -41,18 +41,13 @@ class AdminPanelProvider extends PanelProvider
                 //'primary' => Color::Amber,
                 'primary' => '#3CB371',
             ])
-            /* ->authResponse(function ($request, $user) {
-            if ($user->hasRole('discente')) {
-                return redirect()->route('filament.discente.pages.meus-requerimentos');
-            }
             
-            return redirect()->intended(config('filament.path'));
-        })*/
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->pages([
+            //comente pages para remover dashboard
+            /*->pages([
                 Pages\Dashboard::class,
-            ])
+            ])*/
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,

@@ -28,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         // $this->app->bind(LoginResponseContract::class, LoginResponse::class);
+
+       /*  $this->app->singleton(
+        LoginResponse::class,
+        \App\Http\Responses\LoginResponse::class
+    );*/
     }
 
     /**

@@ -9,10 +9,10 @@ class LoginResponse implements Responsable
 {
     public function toResponse($request): RedirectResponse
     {
-       // $user = auth()->user();
+       # $user = auth()->user();
         
         // Redireciona para requerimentos independente da role
-        return redirect()->intended('filament.admin.resources.requerimentos.index');
+        #return redirect()->to(route('filament.admin.resources.requerimentos.index'));
         
         // Ou se quiser diferenciar por role:
         /*
