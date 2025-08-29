@@ -114,9 +114,8 @@ class RequerimentoResource extends Resource
 
                 Forms\Components\TextInput::make('num_processo')
                     ->required()
-                    
                     ->maxLength(255)
-                    ->visible(fn (Get $get) => $get('processo_sei') === true)
+                    ->visible(fn (Get $get) => $get('processo_sei') === true && (!auth()->user()->hasRole('Discente')))
                     ->label('Número do Processo no SEI'),
 
                     // informações complementares
