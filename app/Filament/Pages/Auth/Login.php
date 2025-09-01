@@ -19,7 +19,6 @@ class Login extends BaseLogin
         return 'SISREQ';
        
     }
-
     public function getSubheading(): string|Htmlable
     {
         return 'Sistema de Requerimentos';

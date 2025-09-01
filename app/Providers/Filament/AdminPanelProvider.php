@@ -20,6 +20,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Navigation\NavigationGroup;
 use Rmsramos\Activitylog\ActivitylogPlugin;
+use Filament\View\PanelsRenderHook;
 
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 
@@ -27,6 +28,9 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+
+        $isLogin = str_ends_with(request()->url(), '/login'); 
+
         return $panel
             ->default()
             ->id('admin')
@@ -41,7 +45,13 @@ class AdminPanelProvider extends PanelProvider
                 //'primary' => Color::Amber,
                 'primary' => '#3CB371',
             ])
+            ->when($isLogin, fn ($panel) => $panel
+                ->renderHook(
+                // PanelsRenderHook::BODY_END,
+                PanelsRenderHook::FOOTER,
+                fn() => view('footer')    )
             
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             //comente pages para remover dashboard
