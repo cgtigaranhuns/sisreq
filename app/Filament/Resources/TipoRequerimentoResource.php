@@ -82,6 +82,9 @@ class TipoRequerimentoResource extends Resource
                     ->boolean(),
                 Tables\Columns\ToggleColumn::make('status')
                     ->visible(fn () => auth()->user()->hasRole('Admin')),
+                Tables\Columns\IconColumn::make('status')
+                    ->visible(fn () => !auth()->user()->hasRole('Admin'))
+                    ->boolean(),    
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
