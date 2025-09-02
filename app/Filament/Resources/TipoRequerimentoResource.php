@@ -78,10 +78,10 @@ class TipoRequerimentoResource extends Resource
                     ->label('Descrição')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('infor_complementares')
-                ->label('Informações complementares')
+                    ->label('Informações complementares')
                     ->boolean(),
-                Tables\Columns\IconColumn::make('status')
-                    ->boolean(),
+                Tables\Columns\ToggleColumn::make('status')
+                    ->visible(fn () => auth()->user()->hasRole('Admin')),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -103,13 +103,14 @@ class TipoRequerimentoResource extends Resource
                     ->tooltip('Excluir')
                     ->requiresConfirmation(), // Se deseja confirmação antes de excluir*/
             ])
-            ->bulkActions([
+            /*->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])*/
+                ;
     }
 
     public static function getRelations(): array
