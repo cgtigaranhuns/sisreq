@@ -109,7 +109,7 @@
 
         {{-- Link para o requerimento (Admin) --}}
         <p>
-            <a href="{{ url('/requerimentos/' . $requerimento->id) }}" class="btn-link" target="_blank">
+            <a href="{{ url('/admin/requerimentos/' . $requerimento->id) }}" class="btn-link" target="_blank">
                 Acessar Requerimento
             </a>
         </p>
@@ -141,7 +141,7 @@
 
         {{-- Link para o requerimento (Discente) --}}
         <p>Você pode acompanhar as atualizações deste requerimento através do sistema:</p>
-        <a href="{{ url('/requerimentos/' . $requerimento->id) }}" class="btn-link" target="_blank">
+        <a href="{{ url('/admin/requerimentos/' . $requerimento->id) }}" class="btn-link" target="_blank">
             Acessar Meu Requerimento
         </a>
 
