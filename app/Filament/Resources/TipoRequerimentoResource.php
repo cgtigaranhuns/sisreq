@@ -68,6 +68,7 @@ class TipoRequerimentoResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $isAdmin = auth()->check() && auth()->user()->hasRole('Admin');
         return $table
             ->modifyQueryUsing(function (Builder $query) {
             $query->where('deleted_at', null)->orderBy('descricao');
@@ -80,11 +81,12 @@ class TipoRequerimentoResource extends Resource
                 Tables\Columns\IconColumn::make('infor_complementares')
                     ->label('Informações complementares')
                     ->boolean(),
-                Tables\Columns\ToggleColumn::make('status')
-                    ->visible(fn () => auth()->user()->hasRole('Admin')),
-                Tables\Columns\IconColumn::make('status')
-                    ->visible(fn () => !auth()->user()->hasRole('Admin'))
-                    ->boolean(),    
+                $isAdmin 
+                ? Tables\Columns\ToggleColumn::make('status')
+                : Tables\Columns\IconColumn::make('status')
+                    ->boolean()
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
