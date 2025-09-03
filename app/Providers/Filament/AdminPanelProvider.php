@@ -77,15 +77,15 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->navigationGroups([
                 NavigationGroup::make()
-                ->label('Cadastros')
-          
-                ->collapsed(true),
+                ->label('Cadastros'),
                 //->collapsible(),
                 //->sidebarCollapsibleOnDesktop(),
                 NavigationGroup::make()
+                ->collapsed(true)
                 ->label('Segurança'),
               //  ->icon('heroicon-o-shopping-cart'),
                 NavigationGroup::make()
+                ->collapsed(true)
                 ->label('Configurações'),
                 //->icon('heroicon-o-shopping-cart'),
             ])
