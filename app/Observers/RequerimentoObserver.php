@@ -6,6 +6,8 @@ use App\Models\Requerimento;
 use App\Models\User;
 use App\Models\Discente;
 use App\Jobs\SendRequerimentoEmails;
+use App\Jobs\SendRequerimentoUpdateEmails;
+use App\Jobs\SendRequerimentoDeleteEmails;
 use App\Mail\NovoRequerimentoCriado;
 use Illuminate\Support\Facades\Mail;
 
@@ -16,48 +18,25 @@ class RequerimentoObserver
      */
     public function created(Requerimento $requerimento): void
     {
-       /* try {
-            $discente = $requerimento->discente; // Assume que o relacionamento existe
-            $adminEmail = env('MAIL_ADMIN');
-    
-            // Validações
-            if (!$discente) {
-                \Log::error("Discente não encontrado para o requerimento ID: {$requerimento->id}");
-                return;
-            }
-    
-            // E-mail para o ADMIN
-            if ($adminEmail) {
-                Mail::to($adminEmail)->send(
-                    new NovoRequerimentoCriado($requerimento, $discente, 'admin')
-                );
-            }
-    
-            // E-mail para o DISCENTE
-            if ($discente->email) {
-                Mail::to($discente->email)->send(
-                    new NovoRequerimentoCriado($requerimento, $discente, 'discente')
-                );
-            }
-    
-        } catch (\Exception $e) {
-            \Log::error("Erro ao enviar e-mails para o requerimento ID: {$requerimento->id}. Erro: " . $e->getMessage());
-        }
-    }*/
-
       try {
         // Despacha o Job com delay de 30 segundos
         SendRequerimentoEmails::dispatch($requerimento)->delay(now()->addSeconds(5));
-    } catch (\Exception $e) {
-        \Log::error("Erro ao despachar job de e-mail para o requerimento ID: {$requerimento->id}. Erro: " . $e->getMessage());
-    }
-    }
+        } catch (\Exception $e) {
+            \Log::error("Erro ao despachar job de e-mail para o requerimento ID: {$requerimento->id}. Erro: " . $e->getMessage());
+        }
+        }
     /**
      * Handle the Requerimento "updated" event.
      */
     public function updated(Requerimento $requerimento): void
     {
         //
+        try {
+            // Despacha o Job para atualização com delay de 5 segundos
+            SendRequerimentoUpdateEmails::dispatch($requerimento)->delay(now()->addSeconds(5));
+        } catch (\Exception $e) {
+            \Log::error("Erro ao despachar job de e-mail de atualização para o requerimento ID: {$requerimento->id}. Erro: " . $e->getMessage());
+        }
     }
 
     /**
@@ -66,6 +45,12 @@ class RequerimentoObserver
     public function deleted(Requerimento $requerimento): void
     {
         //
+        try {
+            // Despacha o Job para exclusão com delay de 5 segundos
+            SendRequerimentoDeleteEmails::dispatch($requerimento)->delay(now()->addSeconds(5));
+        } catch (\Exception $e) {
+            \Log::error("Erro ao despachar job de e-mail de exclusão para o requerimento ID: {$requerimento->id}. Erro: " . $e->getMessage());
+        }
     }
 
     /**
@@ -74,6 +59,14 @@ class RequerimentoObserver
     public function restored(Requerimento $requerimento): void
     {
         //
+        /*
+        // Opcional: enviar e-mail quando um requerimento for restaurado
+        try {
+            SendRequerimentoUpdateEmails::dispatch($requerimento, 'restaurado')->delay(now()->addSeconds(5));
+        } catch (\Exception $e) {
+            \Log::error("Erro ao despachar job de e-mail de restauração para o requerimento ID: {$requerimento->id}. Erro: " . $e->getMessage());
+        }
+            */
     }
 
     /**
@@ -82,5 +75,12 @@ class RequerimentoObserver
     public function forceDeleted(Requerimento $requerimento): void
     {
         //
+        /*
+        // Opcional: enviar e-mail quando um requerimento for excluído permanentemente
+        try {
+            SendRequerimentoDeleteEmails::dispatch($requerimento, true)->delay(now()->addSeconds(5));
+        } catch (\Exception $e) {
+            \Log::error("Erro ao despachar job de e-mail de exclusão permanente para o requerimento ID: {$requerimento->id}. Erro: " . $e->getMessage());
+        }*/
     }
 }

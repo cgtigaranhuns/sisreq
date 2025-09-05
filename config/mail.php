@@ -130,5 +130,6 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
+    'admin_email' => env('MAIL_ADMIN'),
 
 ];

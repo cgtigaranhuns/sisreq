@@ -157,7 +157,7 @@ class RequerimentoResource extends Resource
                         'application/msword',
                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     ])
-                    ->maxSize(10240) // 5MB
+                    ->maxSize(102400) // 5MB
                     ->columnSpanFull()
                     ->hidden(function (Forms\Get $get) {
                         $tipoId = $get('tipo_requerimento_id');
