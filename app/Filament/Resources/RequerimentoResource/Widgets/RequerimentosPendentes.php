@@ -181,7 +181,7 @@ class RequerimentosPendentes extends BaseWidget
         ];
     }
 
-    protected function getTableRecordUrlUsing(): ?\Closure
+   /* protected function getTableRecordUrlUsing(): ?\Closure
     {
         return fn (Requerimento $record): string => RequerimentoResource::getUrl('view', ['record' => $record]);
     }

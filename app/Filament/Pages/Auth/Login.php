@@ -29,7 +29,7 @@ class Login extends BaseLogin
         return $form
             ->schema([
                 TextInput::make('matricula')
-                    ->label('Matricula')
+                    ->label('Matrícula')
                     ->required()
                     ->autocomplete()
                     ->autofocus()

@@ -52,7 +52,7 @@ class RequerimentosEmAnalise extends BaseWidget
                     ->limit(35)
                     ->sortable(),
                     Tables\Columns\TextColumn::make('discente.matricula')
-                    ->label('Matricula')
+                    ->label('Matrícula')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tipo_requerimento.descricao')
