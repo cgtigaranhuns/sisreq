@@ -23,6 +23,19 @@ class Requerimento extends Model
         'status',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Prevenir que operações em anexos atualizem o timestamp do requerimento
+        static::updating(function ($model) {
+            // Se estiver apenas atualizando o timestamp, não disparar eventos
+            if (count(array_diff(array_keys($model->getDirty()), ['updated_at'])) === 0) {
+                return false;
+            }
+        });
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

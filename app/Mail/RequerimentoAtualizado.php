@@ -18,14 +18,16 @@ class RequerimentoAtualizado extends Mailable
     public $destinatario;
     public $anexo;
     public $acao;
+    public $tipo; // 'requerimento' ou 'anexo'
 
-    public function __construct(Requerimento $requerimento, Discente $discente, $destinatario, ?Anexo $anexo = null, ?string $acao = null)
+    public function __construct(Requerimento $requerimento, Discente $discente, $destinatario, ?Anexo $anexo = null, ?string $acao = null, ?string $tipo = 'requerimento')
     {
         $this->requerimento = $requerimento;
         $this->discente = $discente;
         $this->destinatario = $destinatario;
         $this->anexo = $anexo;
         $this->acao = $acao;
+        $this->tipo = $tipo;
     }
 
     public function build()
@@ -40,24 +42,44 @@ class RequerimentoAtualizado extends Mailable
                         'destinatario' => $this->destinatario,
                         'anexo' => $this->anexo,
                         'acao' => $this->acao,
+                        'tipo' => $this->tipo,
                     ]);
     }
 
     private function getSubject(): string
-    {
+{
+    // Se for uma ação de anexo, trata especificamente
+    if ($this->tipo === 'anexo') {
         $baseSubject = $this->destinatario === 'discente' 
-            ? "Seu requerimento #{$this->requerimento->id} foi "
-            : "Requerimento #{$this->requerimento->id} foi ";
+            ? "Seu requerimento #{$this->requerimento->id}: "
+            : "Requerimento #{$this->requerimento->id}: ";
 
         switch ($this->acao) {
             case 'criado':
-                return $baseSubject . 'adicionado um novo anexo';
+                return $baseSubject . 'Novo anexo adicionado';
             case 'atualizado':
-                return $baseSubject . 'atualizado o anexo';
+                return $baseSubject . 'Anexo atualizado';
             case 'deletado':
-                return $baseSubject . 'removido um anexo';
+                return $baseSubject . 'Anexo removido';
             default:
-                return $baseSubject . 'atualizado';
+                return $baseSubject . 'Alteração no anexo';
         }
     }
+
+    // Se for ação do requerimento (mantém a lógica original)
+    $baseSubject = $this->destinatario === 'discente' 
+        ? "Seu requerimento #{$this->requerimento->id} foi "
+        : "Requerimento #{$this->requerimento->id} foi ";
+
+    switch ($this->acao) {
+        case 'criado':
+            return $baseSubject . 'criado';
+        case 'atualizado':
+            return $baseSubject . 'atualizado';
+        case 'deletado':
+            return $baseSubject . 'excluído';
+        default:
+            return $baseSubject . 'atualizado';
+    }
+}
 }

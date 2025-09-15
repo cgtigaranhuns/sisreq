@@ -159,16 +159,22 @@ class RequerimentoResource extends Resource
                     ])
                     ->maxSize(102400) // 5MB
                     ->columnSpanFull()
-                    ->hidden(function (Forms\Get $get) {
-                        $tipoId = $get('tipo_requerimento_id');
-                        if (!$tipoId) {
-                            return true;
-                        }
-                        
-                        $tipoRequerimento = TipoRequerimento::find($tipoId);
-                        return $tipoRequerimento->anexo === null;
-                    }),
-            ]);
+                    ->hidden(function (Forms\Get $get, string $operation) {
+                    // Esconde sempre na edição
+                    if ($operation === 'edit') {
+                        return true;
+                    }
+                    
+                    // Na criação, aplica a regra do tipo de requerimento
+                    $tipoId = $get('tipo_requerimento_id');
+                    if (!$tipoId) {
+                        return true;
+                    }
+                    
+                    $tipoRequerimento = TipoRequerimento::find($tipoId);
+                    return $tipoRequerimento->anexo === null;
+                })
+                        ]);
     }
 
     public static function table(Table $table): Table
