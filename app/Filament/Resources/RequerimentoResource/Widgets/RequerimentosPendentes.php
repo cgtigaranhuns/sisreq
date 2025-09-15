@@ -39,6 +39,12 @@ class RequerimentosPendentes extends BaseWidget
 
         return $query;
     }
+     // MÉTODO PUBLIC PARA RESOLVER O ERRO
+    public function getTable(): \Filament\Tables\Table
+    {
+        return parent::getTable()
+            ->striped();
+    }
 
     protected function getTableColumns(): array
     {

@@ -33,11 +33,17 @@ class RequerimentosEmAnalise extends BaseWidget
       
         if ($user->hasRole('Discente')) {
         return Requerimento::query()
-            ->where('status', 'em_analise')->where('user_id', $user->id)->orderBY('id', 'desc');
+            ->where('status', 'em_analise')->where('user_id', $user->id)->orderBY('id', 'asc');
         }else {
             return Requerimento::query()
             ->where('status', 'em_analise')->orderBY('id', 'desc');
         }
+    }
+     // MÉTODO PUBLIC PARA RESOLVER O ERRO
+    public function getTable(): \Filament\Tables\Table
+    {
+        return parent::getTable()
+            ->striped();
     }
 
     protected function getTableColumns(): array

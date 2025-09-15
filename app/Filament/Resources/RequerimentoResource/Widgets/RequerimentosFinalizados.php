@@ -27,11 +27,17 @@ class RequerimentosFinalizados extends BaseWidget
        
         if ($user->hasRole('Discente')) {
         return Requerimento::query()
-            ->where('status', 'finalizado')->where('user_id', $user->id)->orderBY('id', 'desc');
+            ->where('status', 'finalizado')->where('user_id', $user->id)->orderBY('id', 'asc');
         }else {
             return Requerimento::query()
             ->where('status', 'finalizado')->orderBY('id', 'desc');
         }
+    }
+     // MÉTODO PUBLIC PARA RESOLVER O ERRO
+    public function getTable(): \Filament\Tables\Table
+    {
+        return parent::getTable()
+            ->striped();
     }
 
     protected function getTableColumns(): array
