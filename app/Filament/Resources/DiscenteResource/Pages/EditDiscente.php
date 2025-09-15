@@ -21,6 +21,10 @@ class EditDiscente extends EditRecord
             Actions\RestoreAction::make(),
         ];
     }
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
     public function mount($record): void
     {
         parent::mount($record);

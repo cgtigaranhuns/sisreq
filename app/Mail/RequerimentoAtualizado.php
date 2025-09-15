@@ -68,8 +68,8 @@ class RequerimentoAtualizado extends Mailable
 
     // Se for ação do requerimento (mantém a lógica original)
     $baseSubject = $this->destinatario === 'discente' 
-        ? "Seu requerimento #{$this->requerimento->id} foi "
-        : "Requerimento #{$this->requerimento->id} foi ";
+        ? "Seu requerimento #{$this->requerimento->id} Foi "
+        : "Requerimento #{$this->requerimento->id} Foi ";
 
     switch ($this->acao) {
         case 'criado':

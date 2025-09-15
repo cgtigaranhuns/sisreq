@@ -26,4 +26,8 @@ class EditUser extends EditRecord
 
         Gate::authorize('update', $this->record);
     }
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

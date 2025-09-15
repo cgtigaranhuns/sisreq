@@ -44,4 +44,8 @@ class EditRequerimento extends EditRecord
 
     Gate::authorize('view', $this->record);
 }
+protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

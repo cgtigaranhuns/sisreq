@@ -19,6 +19,10 @@ class ViewAcompanhamento extends ViewRecord
             // Actions\EditAction::make(),
         ];
     }
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 
     public function form(Form $form): Form
     {

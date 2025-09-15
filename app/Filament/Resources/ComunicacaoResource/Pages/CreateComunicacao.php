@@ -10,4 +10,8 @@ class CreateComunicacao extends CreateRecord
 {
     protected static string $resource = ComunicacaoResource::class;
     protected static ?string $title = 'Novo Comunicado';
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
