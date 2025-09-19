@@ -163,6 +163,7 @@ return [
         /*
          * Application Service Providers...
          */
+        App\Providers\ConfigServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
@@ -170,6 +171,8 @@ return [
         App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
        // App\Providers\FilamentAuthServiceProvider::class,
+        //App\Providers\ConfigServiceProvider::class,
+       
     ])->toArray(),
 
     /*

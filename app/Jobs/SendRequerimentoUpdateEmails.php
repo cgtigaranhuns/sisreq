@@ -29,7 +29,7 @@ class SendRequerimentoUpdateEmails implements ShouldQueue
         try {
             
             $discente = $this->requerimento->discente;
-            $adminEmail = env('MAIL_ADMIN');
+            $adminEmail = config('mail.admin');
 
             // Validações
             if (!$discente) {

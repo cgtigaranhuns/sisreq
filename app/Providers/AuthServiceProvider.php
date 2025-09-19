@@ -27,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         TipoRequerimento::class => TipoRequerimentoPolicy::class,
         Comunicacao::class => ComunicacaoPolicy::class,
         Curso::class => CursoPolicy::class,
+        Configuracoe::class => ConfiguracoesPolicy::class,
        // Tipo_requerimento::class => TipoRequerimentoPolicy::class,
         
     ];

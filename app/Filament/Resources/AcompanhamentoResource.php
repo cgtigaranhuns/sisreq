@@ -243,12 +243,18 @@ class AcompanhamentoResource extends Resource
             ->columns([
                // Tables\Columns\TextColumn::make('id')
                // ->label('#'),
-                 Tables\Columns\TextColumn::make('requerimento')
+                 Tables\Columns\TextColumn::make('requerimento_id')
                     ->label('ID - Tipo Requerimento')
                     ->formatStateUsing(function ($record) {
                         return "{$record->requerimento->id}  - {$record->requerimento->tipo_requerimento->descricao}";
                     })
-                    ->searchable(['requerimento.id',  'requerimento.tipo_requerimento.descricao'])
+                    ->searchable(query: function (Builder $query, string $search) {
+                        $query->whereHas('requerimento.tipo_requerimento', function ($q) use ($search) {
+                            $q->where('descricao', 'like', "%{$search}%");
+                        })->orWhereHas('requerimento', function ($q) use ($search) {
+                            $q->where('id', 'like', "%{$search}%");
+                        });
+                    })
                     ->sortable()
                     ->limit(50),
                 /*Tables\Columns\TextColumn::make('requerimento')
@@ -272,7 +278,7 @@ class AcompanhamentoResource extends Resource
                     ->sortable()
                     ->limit(50),*/
                     Tables\Columns\TextColumn::make('requerimento.discente.nome')
-                   
+                   ->searchable()
                     ->sortable()
                     ->limit(50),
                /* Tables\Columns\TextColumn::make('descricao')

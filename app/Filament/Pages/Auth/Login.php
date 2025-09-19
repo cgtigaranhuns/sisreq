@@ -16,7 +16,9 @@ class Login extends BaseLogin
 
     public function getHeading(): string|Htmlable
     {
-        return 'SISREQ';
+        //return  env('LDAP_ADM_BASE_DN');
+        return  config('app.name');
+      //  return  config('app.name') . '  ' . config('nome_instituicao');
        
     }
     public function getSubheading(): string|Htmlable

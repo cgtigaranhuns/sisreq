@@ -16,6 +16,8 @@ use App\Models\Comunicacao;
 use App\Observers\ComunicacaoObserver;
 use App\Models\Anexo;
 use App\Observers\AnexoObserver;
+use App\Models\Configuracoe;
+use App\Observers\ConfiguracoesObserver;
 
 
 
@@ -53,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
         Acompanhamento::observe(AcompanhamentoObserver::class);
         Comunicacao::observe(ComunicacaoObserver::class);
         Anexo::observe(AnexoObserver::class);
+        Configuracoe::observe(ConfiguracoesObserver::class);
        
     }
 }

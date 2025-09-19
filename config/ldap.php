@@ -30,19 +30,21 @@ return [
         'adm' => [
             'hosts' => ['172.28.1.77'],
             'username' => env('LDAP_ADM_USERNAME'),
+           // 'username' => db_config('ldap_adm_username'),
             'password' => env('LDAP_ADM_PASSWORD'),
+            'base_dn' => env('LDAP_ADM_BASE_DN'),
             'port' => env('LDAP_ADM_PORT', 389),
-            'base_dn' => env('LDAP_ADM_BASE_DN', 'dc=adm,dc=garanhuns,dc=ifpe'),
             'timeout' => env('LDAP_ADM_TIMEOUT', 5),
             'use_ssl' => env('LDAP_ADM_SSL', false),
             'use_tls' => env('LDAP_ADM_TLS', false),
         ],
+      //  dd(Config('services.ifpe_api.url')),
         'labs' => [
             'hosts' => ['172.28.2.55'],
             'username' => env('LDAP_LABS_USERNAME'),
             'password' => env('LDAP_LABS_PASSWORD'),
+            'base_dn' => env('LDAP_LABS_BASE_DN'),
             'port' => env('LDAP_LABS_PORT', 389),
-            'base_dn' => env('LDAP_LABS_BASE_DN', 'dc=labs,dc=garanhuns,dc=ifpe'),
             'timeout' => env('LDAP_LABS_TIMEOUT', 5),
             'use_ssl' => env('LDAP_LABS_SSL', false),
             'use_tls' => env('LDAP_LABS_TLS', false),
@@ -61,7 +63,7 @@ return [
     */
 
     'logging' => [
-        'enabled' => env('LDAP_LOGGING', true),
+       // 'enabled' => db_config('ldap_logging', true),
         'channel' => env('LOG_CHANNEL', 'stack'),
         'level' => env('LOG_LEVEL', 'info'),
     ],
@@ -78,7 +80,7 @@ return [
     */
 
     'cache' => [
-        'enabled' => env('LDAP_CACHE', false),
+        //'enabled' => db_config('ldap_cache', false),
         'driver' => env('CACHE_DRIVER', 'file'),
     ],
 

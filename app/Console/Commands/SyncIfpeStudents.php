@@ -25,8 +25,8 @@ class SyncIfpeStudents extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->apiBaseUrl = env('IFPE_API_URL');
-        $this->apiToken = env('IFPE_API_TOKEN');
+        $this->apiBaseUrl = config('services.ifpe_api.url');
+        $this->apiToken = config('services.ifpe_api.token');
     }
 
     public function handle()
