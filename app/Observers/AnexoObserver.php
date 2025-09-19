@@ -99,7 +99,7 @@ class AnexoObserver
 
         // Enviar email para o admin - especificando que é ação de anexo
         try {
-            Mail::to(config('mail.admin_email'))
+            Mail::to(config('mail.admin'))
                 ->send(new RequerimentoAtualizado($requerimento, $discente, 'admin', $anexo, $acao, 'anexo'));
         } catch (\Exception $e) {
             \Log::error('Erro ao enviar email para admin: ' . $e->getMessage());
