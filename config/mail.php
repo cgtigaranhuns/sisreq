@@ -35,12 +35,12 @@ return [
 
     'mailers' => [
         'smtp' => [
-           /* 'transport' => db_config('mail_mailer'),
-            'host' => db_config('mail_host'),
-            'port' => db_config('mail_port'),
-            'encryption' => db_config('mail_encryption'),
-            'username' => db_config('mail_username'),
-            'password' => db_config('mail_password'),*/
+            'transport' => env('MAIL_MAILER'),
+            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'port' => env('MAIL_PORT', 587),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'), 
+            'username' => env('MAIL_USERNAME'),
+            'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
@@ -108,8 +108,8 @@ return [
     */
 
     'from' => [
-     //   'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-     //   'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'name' => env('MAIL_FROM_NAME', 'Example'),
      //   'address' => db_config('mail_from_address', 'hello@example.com'),
      //   'name' => db_config('mail_from_name', 'Example'),
     ],
@@ -132,6 +132,6 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
-   // 'admin_email' => db_config('mail_admin'),
+    'admin' => db_config('MAIL_ADMIN'),
 
 ];
