@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Configuracoe;
+use Illuminate\Support\Facades\Config;
 
 class ConfiguracoesObserver
 {
@@ -28,11 +29,11 @@ class ConfiguracoesObserver
     private function applyConfig(Configuracoe $config): void
     {
         // 🔹 App
-        Config::set('nome_instituicao', $config->nome_instituicao );
+        Config::set('nome_instituicao', $config->nome_instituicao);
         Config::set('app.name', $config->mail_from_name);
-        Config::set('app.version', $config->versao_sistema );
-         Config::set('app.dt.version', $config->data_atualizacao);
-         Config::set('db.version', $config->versao_db);
+        Config::set('app.version', $config->versao_sistema);
+        Config::set('app.dt.version', $config->data_atualizacao);
+        Config::set('db.version', $config->versao_db);
         Config::set('db.dt.version', $config->data_atualizacao_db);
         // 🔹 Mail
         Config::set('mail.default', $config->mail_mailer);
