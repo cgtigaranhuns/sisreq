@@ -50,15 +50,18 @@ class RequerimentosFinalizados extends BaseWidget
                 Tables\Columns\TextColumn::make('discente.nome')
                     //->numeric()
                     ->limit(35)
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                     Tables\Columns\TextColumn::make('discente.matricula')
                     ->label('Matrícula')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('tipo_requerimento.descricao')
                     ->Label('Tipo do Requerimento')
                     ->limit(35)
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('anexos_count')
                     ->label('Anexos')
                     ->aligncenter()
@@ -81,7 +84,7 @@ class RequerimentosFinalizados extends BaseWidget
 
     protected function getHeading(): string
     {
-        return 'Pendentes';
+        return 'Finalizados';
     }
     
     protected function getTableActions(): array

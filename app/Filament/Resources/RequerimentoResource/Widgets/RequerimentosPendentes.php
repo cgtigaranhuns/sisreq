@@ -55,15 +55,18 @@ class RequerimentosPendentes extends BaseWidget
                 ->sortable(),
             Tables\Columns\TextColumn::make('discente.nome')
                 ->limit(35)
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
             Tables\Columns\TextColumn::make('discente.matricula')
                 ->label('Matrícula')
                 ->numeric()
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
             Tables\Columns\TextColumn::make('tipo_requerimento.descricao')
                 ->label('Tipo do Requerimento')
                 ->limit(35)
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
             Tables\Columns\TextColumn::make('anexos_count')
                 ->label('Anexos')
                 ->alignCenter()
@@ -185,6 +188,10 @@ class RequerimentosPendentes extends BaseWidget
                 ->tooltip('Excluir')
                 ->action(fn (Requerimento $record) => $record->delete()),
         ];
+    }
+     protected function getHeading(): string
+    {
+        return 'Pendentes';
     }
 
    /* protected function getTableRecordUrlUsing(): ?\Closure
