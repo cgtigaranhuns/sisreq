@@ -37,15 +37,22 @@ class ConfiguracoeResource extends Resource
                         ->schema([
                             Forms\Components\TextInput::make('nome_instituicao')
                                 ->label('Nome da Instituição')
+                                ->columnspan(3)
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('endereco_instituicao')
                                 ->label('Endereço da Instituição')
+                                ->columnspan(3)
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('contato_instituicao')
                                 ->label('Contato da Instituição')
+                                ->columnspan(2)
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('mail_from_name')
+                                ->label('Nome do Sistema')
+                                ->columnspan(2)
                                 ->maxLength(255),
                         ])
-                        ->columns(3),
+                        ->columns(10),
                         Fieldset::make('Versão do Sistema e BD')
                         ->schema([
                             Forms\Components\TextInput::make('versao_sistema')
@@ -89,9 +96,6 @@ class ConfiguracoeResource extends Resource
                             
                             Forms\Components\TextInput::make('mail_from_address')
                                 ->label('E-mail do Remetente')
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('mail_from_name')
-                                ->label('Nome do Remetente')
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('mail_admin')
                                 ->label('E-mail do Administrador')
