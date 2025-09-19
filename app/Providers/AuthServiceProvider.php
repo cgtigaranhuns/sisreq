@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         TipoRequerimento::class => TipoRequerimentoPolicy::class,
         Comunicacao::class => ComunicacaoPolicy::class,
         Curso::class => CursoPolicy::class,
-        Configuracoe::class => ConfiguracoesPolicy::class,
+        \App\Models\Configuracoe::class => \App\Policies\ConfiguracoesPolicy::class,
        // Tipo_requerimento::class => TipoRequerimentoPolicy::class,
         
     ];
@@ -37,6 +37,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // ⚡ Registra automaticamente todas as policies definidas em $policies
+       $this->registerPolicies();
+        
         Auth::provider('multi-ldap', function ($app, array $config) {
             return new MultiLdapUserProvider();
         });

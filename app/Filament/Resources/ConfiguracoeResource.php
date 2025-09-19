@@ -14,8 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Fieldset;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Database\Eloquent\Model;
+
 
 class ConfiguracoeResource extends Resource
 {
@@ -24,7 +23,7 @@ class ConfiguracoeResource extends Resource
     protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-s-cog-8-tooth';
     protected static ?string $navigationLabel = 'Parâmetros';
-    //protected static ?string $slug = 'requerimentos';
+    protected static ?string $slug = 'parametros';
     protected static ?string $pluralModelLabel = 'Parâmetros';
     
     public static function form(Form $form): Form
@@ -47,7 +46,7 @@ class ConfiguracoeResource extends Resource
                                 ->maxLength(255),
                         ])
                         ->columns(3),
-                        Fieldset::make('Versão do Sistema e DB')
+                        Fieldset::make('Versão do Sistema e BD')
                         ->schema([
                             Forms\Components\TextInput::make('versao_sistema')
                                 ->label('Versão do Sistema')
@@ -176,21 +175,13 @@ class ConfiguracoeResource extends Resource
                         ])
                         ->columns(3)
             ])->columns(1),
-                       
-                
-                
-                
-                
-                
-                
-                
-                
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+        ->paginated(false)
             ->columns([
                 Tables\Columns\TextColumn::make('nome_instituicao')
                     ->label('Instituição'),
@@ -215,20 +206,5 @@ class ConfiguracoeResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
-     public static function canView(Model $record): bool
-    {
-        return Gate::allows('view', $record);
-    }
-
-    public static function canEdit(Model $record): bool
-    {
-        return Gate::allows('update', $record);
-    }
+    
 }
