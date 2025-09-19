@@ -132,6 +132,6 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
-    'admin' => db_config('MAIL_ADMIN'),
+    'admin' => env('MAIL_ADMIN'),
 
 ];
