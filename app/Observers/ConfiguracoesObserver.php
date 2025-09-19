@@ -2,14 +2,14 @@
 
 namespace App\Observers;
 
-use App\Models\Configuracao;
+use App\Models\Configuracoe;
 
 class ConfiguracoesObserver
 {
     /**
      * Quando criar ou atualizar um registro na tabela.
      */
-    public function saved(Configuracao $config): void
+    public function saved(Configuracoe $config): void
     {
         $this->applyConfig($config);
     }
@@ -17,7 +17,7 @@ class ConfiguracoesObserver
     /**
      * Quando deletar um registro (opcional).
      */
-    public function deleted(Configuracao $config): void
+    public function deleted(Configuracoe $config): void
     {
         // Aqui você pode resetar para valores do .env
     }
@@ -25,7 +25,7 @@ class ConfiguracoesObserver
     /**
      * Aplica os valores no Laravel Config.
      */
-    private function applyConfig(Configuracao $config): void
+    private function applyConfig(Configuracoe $config): void
     {
         // 🔹 App
         Config::set('nome_instituicao', $config->nome_instituicao );
