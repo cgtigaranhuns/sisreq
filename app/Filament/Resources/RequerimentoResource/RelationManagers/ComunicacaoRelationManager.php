@@ -50,6 +50,21 @@ class ComunicacaoRelationManager extends RelationManager
                 //Tables\Actions\CreateAction::make(),
             ])
             ->actions([
+                // Botão para visualizar a comunicação completa
+                Tables\Actions\Action::make('visualizar')
+                    ->label('')
+                    ->tooltip('Visualizar Comunicação')
+                    ->icon('heroicon-o-eye')
+                    ->color('primary')
+                    ->modalHeading(fn ($record) => "Comunicação #{$record->id}")
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Fechar')
+                    ->modalWidth('4xl')
+                    ->modalContent(function ($record) {
+                        return view('comunicacao-view-modal', [
+                            'comunicacao' => $record
+                        ]);
+                    }),
               //  Tables\Actions\EditAction::make(),
               //  Tables\Actions\DeleteAction::make(),
             ])
