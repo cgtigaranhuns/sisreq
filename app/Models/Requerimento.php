@@ -64,6 +64,12 @@ class Requerimento extends Model
          return $this->hasOne(infor_complement::class, 'requerimento_id', 'id');
          //return $this->hasOne(infor_complement::class);
      }
+
+     public function comunicacoes()
+     {
+         return $this->hasOne(Comunicacao::class, 'requerimento_id', 'id');
+         //return $this->hasOne(infor_complement::class);
+     }
          // Adicione dentro da classe
      public function acompanhamentos()
      {

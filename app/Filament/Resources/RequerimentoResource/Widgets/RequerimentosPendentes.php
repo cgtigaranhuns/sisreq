@@ -31,7 +31,7 @@ class RequerimentosPendentes extends BaseWidget
     {
         $query = Requerimento::query()
             ->where('status', 'pendente')
-            ->orderBy('id', 'desc');
+            ->orderBy('id', 'asc');
 
         if (auth()->user()->hasRole('Discente')) {
             $query->where('user_id', auth()->id());
@@ -64,15 +64,27 @@ class RequerimentosPendentes extends BaseWidget
                 ->searchable(),
             Tables\Columns\TextColumn::make('tipo_requerimento.descricao')
                 ->label('Tipo do Requerimento')
-                ->limit(35)
+                ->limit(30)
                 ->sortable()
                 ->searchable(),
             Tables\Columns\TextColumn::make('anexos_count')
                 ->label('Anexos')
                 ->alignCenter()
                 ->counts('anexos'),
+                // Nova coluna para comunicações
+            // Coluna corrigida para comunicações
+            Tables\Columns\IconColumn::make('comunicacoes')
+                ->label('Comunicações')
+                ->alignCenter()
+                ->getStateUsing(function (Requerimento $record): int {
+                    return $record->comunicacoes()->count();
+                })
+                ->icon(fn ($state): string => $state > 0 ? 'heroicon-s-check' : 'heroicon-s-x-mark')
+                ->color(fn ($state): string => $state > 0 ? 'success' : 'danger')
+                ->tooltip(fn ($state): string => $state > 0 ? "{$state} comunicação(ões)" : 'Sem comunicações'),
             Tables\Columns\TextColumn::make('status')
                 ->badge()
+                ->alignCenter()
                 ->formatStateUsing(fn (string $state): string => match ($state) {
                     'pendente' => 'Pendente',
                      default => $state,

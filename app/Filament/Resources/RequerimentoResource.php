@@ -202,6 +202,7 @@ class RequerimentoResource extends Resource
             RelationManagers\AnexosRelationManager::class,
             RelationManagers\InformacaoComplementarRelationManager::class,
             RelationManagers\AcompanhamentosRelationManager::class,
+            RelationManagers\ComunicacaoRelationManager::class,
         ];
     }
 

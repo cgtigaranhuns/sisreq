@@ -72,9 +72,18 @@ class RequerimentosEmAnalise extends BaseWidget
                     ->label('Anexos')
                     ->aligncenter()
                     ->counts('anexos'),
-              
+                Tables\Columns\IconColumn::make('comunicacoes')
+                    ->label('Comunicações')
+                    ->alignCenter()
+                    ->getStateUsing(function (Requerimento $record): int {
+                        return $record->comunicacoes()->count();
+                    })
+                    ->icon(fn ($state): string => $state > 0 ? 'heroicon-s-check' : 'heroicon-s-x-mark')
+                    ->color(fn ($state): string => $state > 0 ? 'success' : 'danger')
+                    ->tooltip(fn ($state): string => $state > 0 ? "{$state} comunicação(ões)" : 'Sem comunicações'),              
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
+                    ->alignCenter()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'em_analise' => 'Em Análise',
                         default => $state,
@@ -173,13 +182,14 @@ class RequerimentosEmAnalise extends BaseWidget
                     ])
                 );
             }),
-
+            /*
+            // Ação de editar - somente visível para Admin
              EditAction::make()
             ->label('')
             ->visible(auth()->user()->hasRole('Admin') ?? false)
             ->tooltip('Editar')
                 ->url(fn (Requerimento $record): string => RequerimentoResource::getUrl('edit', ['record' => $record])),
-            
+            */
             // Ação de visualização
             ViewAction::make()
             ->label('')
