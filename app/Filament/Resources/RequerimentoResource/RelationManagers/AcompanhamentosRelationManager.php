@@ -70,24 +70,40 @@ class AcompanhamentosRelationManager extends RelationManager
                // Tables\Actions\CreateAction::make(),
             ])
             ->actions([
+
+                // Botão para visualizar o acompanhamento completo
+                Tables\Actions\Action::make('visualizar')
+                    ->label('')
+                    ->tooltip('Visualizar Acompanhamento')
+                    ->icon('heroicon-o-eye')
+                    ->color('primary')
+                    ->modalHeading(fn ($record) => "Acompanhamento #{$record->id}")
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Fechar')
+                    ->modalWidth('4xl')
+                    ->modalContent(function ($record) {
+                        return view('acompanhamento-view-modal', [
+                            'acompanhamento' => $record
+                        ]);
+                    }),
                 Tables\Actions\Action::make('anexos')
-                ->label('Ver Anexos')
-                ->icon('heroicon-o-paper-clip')
-                ->color('gray')
-                ->modalHeading('Anexos do Acompanhamento')
-                ->modalSubmitAction(false)
-                ->modalCancelAction(false)
-                ->modalContent(function ($record) {
-                    return view('anexosAcomp-table', [
-                        'anexos' => $record->anexos->map(function ($anexo) {
-                            return [
-                                'nome_original' => $anexo->nome_original,
-                                'caminho' => $anexo->caminho,
-                                'mime_type' => $anexo->mime_type,
-                                'url' => asset('storage/' . $anexo->caminho)
-                            ];
-                        })->toArray()
-                    ]);
+                    ->label('Ver Anexos')
+                    ->icon('heroicon-o-paper-clip')
+                    ->color('gray')
+                    ->modalHeading('Anexos do Acompanhamento')
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(false)
+                    ->modalContent(function ($record) {
+                        return view('anexosAcomp-table', [
+                            'anexos' => $record->anexos->map(function ($anexo) {
+                                return [
+                                    'nome_original' => $anexo->nome_original,
+                                    'caminho' => $anexo->caminho,
+                                    'mime_type' => $anexo->mime_type,
+                                    'url' => asset('storage/' . $anexo->caminho)
+                                ];
+                            })->toArray()
+                        ]);
                 })
                 ->modalWidth('7xl'),
                /* Tables\Actions\EditAction::make(),
