@@ -38,6 +38,10 @@ class RequerimentoPolicy
      */
     public function update(User $user, Requerimento $requerimento): bool
     {
+        // Se o usuário é Admin, permite a edição sem restrições
+        if ($user->hasRole('Admin')) {
+            return true;
+        }
         // Verifica se o status não é 'Em_analise' ou 'finalizado'
         $statusPermitidos = !in_array($requerimento->status, ['em_analise', 'finalizado']);
         return $user->hasPermissionTo('Alterar Requerimentos')&&

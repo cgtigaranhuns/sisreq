@@ -173,6 +173,13 @@ class RequerimentosEmAnalise extends BaseWidget
                     ])
                 );
             }),
+
+             EditAction::make()
+            ->label('')
+            ->visible(auth()->user()->hasRole('Admin') ?? false)
+            ->tooltip('Editar')
+                ->url(fn (Requerimento $record): string => RequerimentoResource::getUrl('edit', ['record' => $record])),
+            
             // Ação de visualização
             ViewAction::make()
             ->label('')
