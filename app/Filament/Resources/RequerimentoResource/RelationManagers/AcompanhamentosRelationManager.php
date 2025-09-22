@@ -87,9 +87,10 @@ class AcompanhamentosRelationManager extends RelationManager
                         ]);
                     }),
                 Tables\Actions\Action::make('anexos')
-                    ->label('Ver Anexos')
+                    ->label('')
                     ->icon('heroicon-o-paper-clip')
                     ->color('gray')
+                    ->tooltip('Visualizar Anexo do Acompanhamento')
                     ->modalHeading('Anexos do Acompanhamento')
                     ->modalSubmitAction(false)
                     ->modalCancelAction(false)
