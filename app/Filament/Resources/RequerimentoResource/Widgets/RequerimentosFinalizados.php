@@ -74,7 +74,7 @@ class RequerimentosFinalizados extends BaseWidget
                     })
                     ->icon(fn ($state): string => $state > 0 ? 'heroicon-s-chat-bubble-oval-left-ellipsis' : 'heroicon-s-chat-bubble-oval-left-ellipsis')
                     ->color(fn ($state): string => $state > 0 ? 'success' : 'gray')
-                    ->tooltip(fn ($state): string => $state > 0 ? "{$state} comunicação(ões)" : 'Sem comunicações'),
+                    ->tooltip(fn ($state): string => $state > 0 ? ($state > 1 ? "{$state} comunicações" : "{$state} comunicação"): 'Sem comunicações'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->alignCenter()
