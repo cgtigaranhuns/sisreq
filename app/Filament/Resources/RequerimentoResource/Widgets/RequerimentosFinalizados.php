@@ -72,9 +72,12 @@ class RequerimentosFinalizados extends BaseWidget
                     ->getStateUsing(function (Requerimento $record): int {
                         return $record->comunicacoes()->count();
                     })
-                    ->icon(fn ($state): string => $state > 0 ? 'heroicon-s-chat-bubble-oval-left-ellipsis' : 'heroicon-s-chat-bubble-oval-left-ellipsis')
+                   /*->icon(fn ($state): string => $state > 0 ? 'heroicon-s-chat-bubble-oval-left-ellipsis' : 'heroicon-s-chat-bubble-oval-left-ellipsis')
                     ->color(fn ($state): string => $state > 0 ? 'success' : 'gray')
-                    ->tooltip(fn ($state): string => $state > 0 ? ($state > 1 ? "{$state} comunicações" : "{$state} comunicação"): 'Sem comunicações'),
+                    ->tooltip(fn ($state): string => $state > 0 ? ($state > 1 ? "{$state} comunicações" : "{$state} comunicação"): 'Sem comunicações'),*/
+                    ->icon(fn ($state): string => $state > 0 ? 'heroicon-s-check' : '')
+                    ->color(fn ($state): string => $state > 0 ? 'success' : '')
+                    ->tooltip(fn ($state): string => $state > 0 ? ($state > 1 ? "{$state} comunicações" : "{$state} comunicação"): ''),          
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->alignCenter()
