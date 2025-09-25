@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Filament\Tables\Grouping\Group;
 
 class AcompanhamentoResource extends Resource
 {
@@ -240,6 +241,12 @@ class AcompanhamentoResource extends Resource
             }
                 
             })
+            ->groups([
+                Group::make('user.name')
+                ->label('Usuário')
+                ->collapsible()
+                ->orderQueryUsing(fn (Builder $query, string $direction) => $query->orderBy('user_id', $direction)),
+            ])
             ->columns([
                // Tables\Columns\TextColumn::make('id')
                // ->label('#'),

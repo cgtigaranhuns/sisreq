@@ -25,10 +25,12 @@ class ViewRequerimento extends ViewRecord
     {
         return $form->schema([
            
-                    Forms\Components\Select::make('discente_id')
-                    ->relationship('discente', 'nome')
+                    Forms\Components\TextInput::make('id')
+                        ->label('ID')
                         ->disabled(),
-                    
+                    Forms\Components\Select::make('discente_id')
+                        ->relationship('discente', 'nome')
+                        ->disabled(),
                     Forms\Components\Select::make('tipo_requerimento_id')
                         ->relationship('tipo_requerimento', 'descricao')
                         ->disabled(),

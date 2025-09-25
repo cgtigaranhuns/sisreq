@@ -14,6 +14,8 @@ use Filament\Tables\Actions\DeleteAction;
 use App\Filament\Resources\RequerimentoResource;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Grouping\Group;
 
 class RequerimentosFinalizados extends BaseWidget
 {
@@ -37,35 +39,60 @@ class RequerimentosFinalizados extends BaseWidget
     public function getTable(): \Filament\Tables\Table
     {
         return parent::getTable()
-            ->striped();
+            ->striped()
+            ->groups([
+                Group::make('tipo_requerimento.descricao')
+                ->label('Tipo de Requerimento')
+                ->collapsible()
+                ->orderQueryUsing(fn (Builder $query, string $direction) => $query->orderBy('tipo_requerimento_id', $direction)),
+            ]);
     }
 
     protected function getTableColumns(): array
     {
         return [
-            Tables\Columns\TextColumn::make('id')
-                    ->label('#')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('discente.nome')
-                    //->numeric()
-                    ->limit(35)
-                    ->sortable()
-                    ->searchable(),
-                    Tables\Columns\TextColumn::make('discente.matricula')
-                    ->label('Matrícula')
-                    ->numeric()
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('tipo_requerimento.descricao')
-                    ->Label('Tipo do Requerimento')
-                    ->limit(35)
-                    ->sortable()
-                    ->searchable(),
+            Tables\Columns\TextColumn::make('created_at')
+                ->label('Data da Solicit.')
+                ->numeric()
+                ->dateTime('d/m/Y') 
+                ->alignCenter()
+                ->searchable(query: function (Builder $query, string $search) {
+                    // Tenta converter data no formato brasileiro para o formato do banco
+                    $search = str_replace('/', '-', $search);
+                    $timestamp = strtotime($search);
+                    
+                    if ($timestamp !== false) {
+                        $mysqlDate = date('Y-m-d', $timestamp);
+                        $query->whereDate('created_at', $mysqlDate)
+                            ->orWhere('created_at', 'LIKE', "%{$mysqlDate}%");
+                    } else {
+                        // Fallback: busca simples
+                        $query->where('created_at', 'LIKE', "%{$search}%");
+                    }
+                })
+                ->sortable(),
+            Tables\Columns\TextColumn::make('discente.nome')
+                ->limit(35)
+                ->sortable()
+                ->searchable()
+                ->size(TextColumn\TextColumnSize::ExtraSmall),
+            Tables\Columns\TextColumn::make('discente.matricula')
+                ->label('Matrícula')
+                ->numeric()
+                ->sortable()
+                ->searchable()
+                ->size(TextColumn\TextColumnSize::ExtraSmall),
+            Tables\Columns\TextColumn::make('tipo_requerimento.descricao')
+                ->label('Tipo do Requerimento')
+                ->limit(30)
+                ->sortable()
+                ->searchable()
+                ->size(TextColumn\TextColumnSize::ExtraSmall),
                 Tables\Columns\TextColumn::make('anexos_count')
                     ->label('Anexos')
                     ->aligncenter()
-                    ->counts('anexos'),
+                    ->counts('anexos')
+                    ->size(TextColumn\TextColumnSize::ExtraSmall),
                 Tables\Columns\IconColumn::make('comunicacoes')
                     ->label('Comunicações')
                     ->alignCenter()
